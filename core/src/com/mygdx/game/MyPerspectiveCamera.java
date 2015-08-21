@@ -8,8 +8,9 @@ public class MyPerspectiveCamera extends MyCamera {
     private float fovx;
     private float fovy;
     
-    public MyPerspectiveCamera(Vector3 position, Vector3 lookAt, float fovx, float fovy) {
-        super(position, lookAt);
+    public MyPerspectiveCamera(Vector3 position, Vector3 target, float width, float height, float zfar, float znear,
+                               float fovx, float fovy) {
+        super(position,target,width,height,zfar,znear);
         this.fovx = fovx;
         this.fovy = fovy;
     }
@@ -28,8 +29,5 @@ public class MyPerspectiveCamera extends MyCamera {
         return projection;
     }
 
-    public Matrix4 getPVMatrix() {
-        return getPMatrix().mul(getVMatrix());
-    }
 
 }
