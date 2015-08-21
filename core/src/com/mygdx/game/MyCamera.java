@@ -9,12 +9,15 @@ public abstract class MyCamera  {
     private Vector3 target;
     private Vector3 up = new Vector3(0,1,0);
 
+    private float zfar;
+    private float znear;
+
     public MyCamera(Vector3 position, Vector3 target) {
         this.target = target;
         this.position = position;
     }
 
-    public abstract Matrix4 getPVMatrix();
+    public abstract Matrix4 getPMatrix();
 
     public Matrix4 getVMatrix() {
         Vector3 zAxis = position.sub(target).nor(); // The "forward" vector.

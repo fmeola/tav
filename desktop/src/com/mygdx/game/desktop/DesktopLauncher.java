@@ -24,6 +24,10 @@ public class DesktopLauncher {
         Vector3 target = new Vector3(4,5,6);
         Matrix4 camera = new MyCamera(position, target) {
             @Override
+            public Matrix4 getPMatrix() {
+                return null;
+            }
+
             public Matrix4 getPVMatrix() {
                 return super.getVMatrix();}
         }.getPVMatrix();

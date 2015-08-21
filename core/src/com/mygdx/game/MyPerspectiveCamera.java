@@ -3,9 +3,9 @@ package com.mygdx.game;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
-public class MyOrthographicCamera extends MyCamera {
+public class MyPerspectiveCamera extends MyCamera {
 
-    public MyOrthographicCamera(Vector3 position, Vector3 lookAt) {
+    public MyPerspectiveCamera(Vector3 position, Vector3 lookAt) {
         super(position, lookAt);
     }
 
