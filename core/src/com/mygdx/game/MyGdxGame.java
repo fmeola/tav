@@ -20,7 +20,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private Texture img;
     private Mesh spaceshipMesh;
     private ShaderProgram shaderProgram;
-    public PerspectiveCamera cam;
+    public MyCamera cam;
     public CameraInputController camController;
 
     @Override
@@ -40,15 +40,30 @@ public class MyGdxGame extends ApplicationAdapter {
         spaceshipMesh.setVertices(data.meshes.get(0).vertices);
         spaceshipMesh.setIndices(data.meshes.get(0).parts[0].indices);
 
-        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        /*cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(1f, 1f, 1f);
         cam.lookAt(0,0,0);
         cam.near = 1f;
         cam.far = 300f;
-        cam.update();
+        cam.update();*/
+        
+        Vector3 position = new Vector3(1,2,3);
+        Vector3 target = new Vector3(4,5,6);
+        float width = 100;
+        float height = 100;
+        float zfar = 90;
+        float znear = 10;
+        float fovx = 90;
+        float fovy = 90;
+        
+        //        MyOrthographicCamera camera = new MyOrthographicCamera(position, target, width, height, zfar, znear);
+        initPersCam(position, target, width, height, zfar, znear, fovx, fovy);
+        System.out.println("P Matrix\n" + cam.getPMatrix());
+        System.out.println("V Matrix\n" + cam.getVMatrix());
+        System.out.println("PV Matrix\n" + cam.getPVMatrix());
 
-        camController = new CameraInputController(cam);
-        Gdx.input.setInputProcessor(camController);
+        //camController = new CameraInputController(cam);
+        //Gdx.input.setInputProcessor(camController);
     }
 
     @Override
@@ -57,11 +72,20 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         img.bind();
         shaderProgram.begin();
-
-        shaderProgram.setUniformMatrix("u_worldView", cam.combined); //aca trabajar
-        shaderProgram.setUniformi("u_texture", 0);
+        //System.out.println("rendering");
+        shaderProgram.setUniformMatrix("u_worldView", cam.getVMatrix()); //aca trabajar
+        
+        shaderProgram.setUniformi("u_texture", 0);  
         spaceshipMesh.render(shaderProgram, GL20.GL_TRIANGLE_FAN);
         shaderProgram.end();
+    }
+    
+    private void initPersCam(Vector3 position, Vector3 target, float width, float height, float zfar, float znear, float fovx, float fovy) {
+        cam = new MyPerspectiveCamera(position, target, width, height, zfar, znear, fovx, fovy);
+    }
+    
+    private void initOrthoCam(Vector3 position, Vector3 target, float width, float height, float zfar, float znear) {
+        cam = new MyOrthographicCamera(position, target, width, height, zfar, znear);
     }
 
 

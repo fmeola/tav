@@ -20,7 +20,7 @@ public class LoadModelsTest extends ApplicationAdapter {
     private CameraInputController camController;
     private ModelBatch modelBatch;
     private AssetManager assets;
-    private Array<ModelInstance> instances = new Array<>();
+    private Array<ModelInstance> instances = new Array();
     private Environment environment;
     private boolean loading;
 

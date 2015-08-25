@@ -20,8 +20,4 @@ public class MyOrthographicCamera extends MyCamera {
         return projectionMatrix;
     }
 
-    public Matrix4 getPVMatrix() {
-        return getPMatrix().mul(getVMatrix());
-    }
-
 }
