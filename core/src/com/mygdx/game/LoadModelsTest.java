@@ -45,7 +45,6 @@ public class LoadModelsTest extends ApplicationAdapter {
         Gdx.input.setInputProcessor(camController);
 
         assets = new AssetManager();
-//        assets.load("ship.obj", Model.class);
         assets.load("ship.g3db", Model.class);
         loading = true;
     }
@@ -55,7 +54,6 @@ public class LoadModelsTest extends ApplicationAdapter {
      */
 
     private void doneLoading() {
-//        Model ship = assets.get("ship.obj", Model.class);
         Model ship = assets.get("ship.g3db", Model.class);
         ModelInstance shipInstance = new ModelInstance(ship);
         instances.add(shipInstance);

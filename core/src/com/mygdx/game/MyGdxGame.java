@@ -14,14 +14,18 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.camera.MyGdxCamera;
+import com.mygdx.camera.MyGdxOrthographicCamera;
+import com.mygdx.camera.MyGdxPerspectiveCamera;
 
 public class MyGdxGame extends ApplicationAdapter {
 
     private Texture img;
     private Mesh spaceshipMesh;
     private ShaderProgram shaderProgram;
-    public MyCamera cam;
-    public CameraInputController camController;
+
+    private MyGdxPerspectiveCamera camera;
+    private Camera cam;
 
     @Override
     public void create () {
@@ -29,10 +33,8 @@ public class MyGdxGame extends ApplicationAdapter {
         String vs = Gdx.files.internal("defaultVS.glsl").readString();
         String fs = Gdx.files.internal("defaultFS.glsl").readString();
         shaderProgram = new ShaderProgram(vs, fs);
-        System.out.println(shaderProgram.getLog());
         ModelLoader<?> loader = new ObjLoader();
         ModelData data = loader.loadModelData(Gdx.files.internal("ship.obj"));
-
         spaceshipMesh = new Mesh(true,
                 data.meshes.get(0).vertices.length,
                 data.meshes.get(0).parts[0].indices.length,
@@ -40,30 +42,20 @@ public class MyGdxGame extends ApplicationAdapter {
         spaceshipMesh.setVertices(data.meshes.get(0).vertices);
         spaceshipMesh.setIndices(data.meshes.get(0).parts[0].indices);
 
-        /*cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set(1f, 1f, 1f);
-        cam.lookAt(0,0,0);
-        cam.near = 1f;
-        cam.far = 300f;
-        cam.update();*/
-        
-        Vector3 position = new Vector3(1,2,3);
-        Vector3 target = new Vector3(4,5,6);
-        float width = 100;
-        float height = 100;
-        float zfar = 90;
-        float znear = 10;
-        float fovx = 90;
-        float fovy = 90;
-        
-        //        MyOrthographicCamera camera = new MyOrthographicCamera(position, target, width, height, zfar, znear);
-        initPersCam(position, target, width, height, zfar, znear, fovx, fovy);
-        System.out.println("P Matrix\n" + cam.getPMatrix());
-        System.out.println("V Matrix\n" + cam.getVMatrix());
-        System.out.println("PV Matrix\n" + cam.getPVMatrix());
+//        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        cam.position.set(1f, 1f, 1f);
+//        cam.lookAt(0,0,0);
+//        cam.near = 1f;
+//        cam.far = 300f;
+//        cam.update();
 
-        //camController = new CameraInputController(cam);
-        //Gdx.input.setInputProcessor(camController);
+        camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.position.set(1f, 1f, 1f);
+        camera.lookAt(0,0,0);
+        camera.near = 1f;
+        camera.far = 300f;
+//        camera.update();
     }
 
     @Override
@@ -72,42 +64,13 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         img.bind();
         shaderProgram.begin();
-        //System.out.println("rendering");
-        shaderProgram.setUniformMatrix("u_worldView", cam.getVMatrix()); //aca trabajar
-        
-        shaderProgram.setUniformi("u_texture", 0);  
+        shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix());
+//        shaderProgram.setUniformMatrix("u_worldView", cam.combined);
+//        System.out.println(camera.getPVMatrix());
+//        System.out.println(cam.combined);
+        shaderProgram.setUniformi("u_texture", 0);
         spaceshipMesh.render(shaderProgram, GL20.GL_TRIANGLE_FAN);
         shaderProgram.end();
     }
-    
-    private void initPersCam(Vector3 position, Vector3 target, float width, float height, float zfar, float znear, float fovx, float fovy) {
-        cam = new MyPerspectiveCamera(position, target, width, height, zfar, znear, fovx, fovy);
-    }
-    
-    private void initOrthoCam(Vector3 position, Vector3 target, float width, float height, float zfar, float znear) {
-        cam = new MyOrthographicCamera(position, target, width, height, zfar, znear);
-    }
-
-
 
 }
-
-//public class MyGdxGame extends ApplicationAdapter {
-//    SpriteBatch batch;
-//    Texture img;
-//
-//    @Override
-//    public void create () {
-//        batch = new SpriteBatch();
-//        img = new Texture("badlogic.jpg");
-//    }
-//
-//    @Override
-//    public void render () {
-//        Gdx.gl.glClearColor(1, 0, 0, 1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        batch.begin();
-//        batch.draw(img, 0, 0);
-//        batch.end();
-//    }
-//}
