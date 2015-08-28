@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -71,6 +72,22 @@ public class MyGdxGame extends ApplicationAdapter {
         shaderProgram.setUniformi("u_texture", 0);
         spaceshipMesh.render(shaderProgram, GL20.GL_TRIANGLE_FAN);
         shaderProgram.end();
+
+        /**
+         * Mover la cámara.
+         */
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            camera.position.x += -0.1f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            camera.position.x += 0.1f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            camera.position.y += 0.1f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            camera.position.y -= 0.1f;
+        }
     }
 
 }
