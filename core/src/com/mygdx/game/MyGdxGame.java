@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.mygdx.camera.MyCamera;
+import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.camera.MyGdxPerspectiveCamera;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -16,7 +18,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private Mesh spaceshipMesh;
     private ShaderProgram shaderProgram;
 
-    private MyGdxPerspectiveCamera camera;
+    private MyCamera camera;
     private Camera cam;
 
     @Override
@@ -43,6 +45,7 @@ public class MyGdxGame extends ApplicationAdapter {
 //        cam.update();
 
         camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        camera = new MyGdxOrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(1f, 1f, 1f);
         camera.lookAt(0,0,0);
         camera.near = 1f;
