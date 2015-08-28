@@ -3,7 +3,7 @@ package com.mygdx.camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
-public class MyGdxPerspectiveCamera implements MyGdxCamera {
+public class MyGdxPerspectiveCamera implements MyCamera {
 
     private float width;
     private float height;
