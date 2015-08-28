@@ -69,20 +69,29 @@ public class MyGdxGame extends ApplicationAdapter {
         shaderProgram.end();
 
         /**
-         * Mover la cámara.
+         * Mover la cámara con el teclado.
          */
+        float moveAmount = 0.1f;
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            camera.position.x += -0.1f;
+            camera.position.x -= moveAmount;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            camera.position.x += moveAmount;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            camera.position.y += moveAmount;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            camera.position.y -= moveAmount;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            camera.position.x += 0.1f;
+
+        /**
+         * Mover la cámara con el mouse.
+         */
+        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+            camera.position.x -= moveAmount;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            camera.position.y += 0.1f;
+        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
+            camera.position.x += moveAmount;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            camera.position.y -= 0.1f;
-        }
+
     }
 
 }
