@@ -27,12 +27,12 @@ public abstract class MyCamera {
     }
 
     public Matrix4 getVMatrix() {
-        Vector3 currentPosition = new Vector3(position.x, position.y, position.z);
-        Vector3 currentTarget = new Vector3(target.x, target.y, target.z);
-        Vector3 currentUp = new Vector3(up.x, up.y, up.z);
+        Vector3 currentPosition = new Vector3(position);
+        Vector3 currentTarget = new Vector3(target);
+        Vector3 currentUp = new Vector3(up);
         Vector3 zaxis = currentPosition.sub(currentTarget).nor();  // The "forward" vector.
         Vector3 xaxis = currentUp.crs(zaxis).nor(); // The "right" vector.
-        Vector3 currentZAxis = new Vector3(zaxis.x, zaxis.y, zaxis.z);
+        Vector3 currentZAxis = new Vector3(zaxis);
         Vector3 yaxis = currentZAxis.crs(xaxis); // The "up" vector.
         Matrix4 wMatrix = new Matrix4(new float[]{
                 xaxis.x, xaxis.y, xaxis.z, 0,

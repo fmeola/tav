@@ -37,17 +37,17 @@ public class MyGdxGame extends ApplicationAdapter {
         spaceshipMesh.setIndices(data.meshes.get(0).parts[0].indices);
 
         // Cámaras de libdx
-//        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //        cam = new OrthographicCamera(3, 3 * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
-//        cam.position.set(1f, 1f, 1f);
-//        cam.lookAt(0,0,0);
-//        cam.near = 1f;
-//        cam.far = 300f;
-//        cam.update();
+        cam.position.set(1f, 1f, 1f);
+        cam.lookAt(0,0,0);
+        cam.near = 1f;
+        cam.far = 300f;
+        cam.update();
 
         // Nuestras Cámaras
-//        camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera = new MyGdxOrthographicCamera(3, 3 * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
+        camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        camera = new MyGdxOrthographicCamera(3, 3 * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
         camera.position.set(1f, 1f, 1f);
         camera.lookAt(0,0,0);
         camera.near = 1f;
