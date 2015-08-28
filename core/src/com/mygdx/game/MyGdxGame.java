@@ -32,9 +32,11 @@ public class MyGdxGame extends ApplicationAdapter {
         spaceshipMesh = new Mesh(true,
                 data.meshes.get(0).vertices.length,
                 data.meshes.get(0).parts[0].indices.length,
-                VertexAttribute.Position(), VertexAttribute.TexCoords(0), VertexAttribute.Normal());
+                VertexAttribute.Position(), VertexAttribute.Normal(), VertexAttribute.TexCoords(0));
         spaceshipMesh.setVertices(data.meshes.get(0).vertices);
         spaceshipMesh.setIndices(data.meshes.get(0).parts[0].indices);
+        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
+        Gdx.gl.glDepthFunc(Gdx.gl.GL_LESS);
 
         // Cámaras de libdx
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -65,7 +67,7 @@ public class MyGdxGame extends ApplicationAdapter {
 //        System.out.println(camera.getPVMatrix());
 //        System.out.println(cam.combined);
         shaderProgram.setUniformi("u_texture", 0);
-        spaceshipMesh.render(shaderProgram, GL20.GL_TRIANGLE_FAN);
+        spaceshipMesh.render(shaderProgram, GL20.GL_TRIANGLES);
         shaderProgram.end();
 
         /**
