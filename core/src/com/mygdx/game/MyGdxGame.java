@@ -8,9 +8,13 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.camera.MyGdxPerspectiveCamera;
+import com.mygdx.camera.Rotation;
 
 public class MyGdxGame extends ApplicationAdapter {
 
@@ -39,20 +43,20 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glDepthFunc(Gdx.gl.GL_LESS);
 
         // Cámaras de libdx
-        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //        cam = new OrthographicCamera(3, 3 * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
-        cam.position.set(1f, 1f, 1f);
-        cam.lookAt(0,0,0);
-        cam.near = 1f;
-        cam.far = 300f;
-        cam.update();
+//        cam.position.set(1f, 1f, 1f);
+//        cam.lookAt(0,0,0);
+//        cam.near = 1f;
+//        cam.far = 300f;
+//        cam.update();
 
         // Nuestras Cámaras
-        camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        camera = new MyGdxOrthographicCamera(3, 3 * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
-        camera.position.set(1f, 1f, 1f);
+//        camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new MyGdxOrthographicCamera(3, 3 * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
+        camera.position.set(0f, 0f, 10f);
         camera.lookAt(0,0,0);
-        camera.near = 1f;
+        camera.near = 0.1f;
         camera.far = 300f;
     }
 
@@ -88,10 +92,10 @@ public class MyGdxGame extends ApplicationAdapter {
          * Mover la cámara con el mouse.
          */
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-            camera.position.x -= moveAmount;
+            camera.rotX -= 0.01f;
         }
         if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
-            camera.position.x += moveAmount;
+            camera.rotX += 0.01f;
         }
 
     }
