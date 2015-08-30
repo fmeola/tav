@@ -138,7 +138,6 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        System.out.println(screenX);
         float value;
         if (screenX != mousePositionX) {
             value = screenX > mousePositionX ? -0.005f : 0.005f;
