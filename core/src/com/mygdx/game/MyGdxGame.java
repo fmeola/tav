@@ -25,6 +25,9 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
     private MyCamera camera;
     private Camera cam;
+    
+    private int mousePositionX;
+    private int mousePositionY;
 
     @Override
     public void create () {
@@ -91,15 +94,15 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
             camera.position.y -= moveAmount;
         }
 
-        /**
-         * Mover la cámara con el mouse.
-         */
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-            camera.rotX -= 0.01f;
-        }
-        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
-            camera.rotX += 0.01f;
-        }
+//        /**
+//         * Mover la cámara con el mouse.
+//         */
+//        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+//            camera.rotX -= 0.01f;
+//        }
+//        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
+//            camera.rotX += 0.01f;
+//        }
 
     }
 
@@ -136,6 +139,17 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         System.out.println(screenX);
+        float value;
+        if (screenX != mousePositionX) {
+            value = screenX > mousePositionX ? -0.005f : 0.005f;
+            camera.rotX += value;
+            mousePositionX = screenX;
+        }
+        if (screenY != mousePositionY) {
+            value = screenY > mousePositionY ? -0.005f : 0.005f;
+            camera.rotY += value;
+            mousePositionY = screenY;
+        }
         return true;
     }
 

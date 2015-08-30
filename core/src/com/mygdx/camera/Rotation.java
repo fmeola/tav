@@ -14,5 +14,15 @@ public class Rotation {
         });
         return mat;
     }
+    
+    public static Matrix4 getYRotationMatrix(float theta) {
+        Matrix4 mat = new Matrix4(new float[] {
+            (float)Math.cos(theta), 0, (float)-Math.sin(theta), 0,
+            0, 1, 0, 0,
+            (float)Math.sin(theta), 0, (float)Math.cos(theta), 0,
+            0, 0, 0, 1
+        });
+        return mat;
+    }
 
 }
