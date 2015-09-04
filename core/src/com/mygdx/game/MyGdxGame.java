@@ -32,9 +32,10 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     @Override
     public void create () {
         img = new Texture("ship.png");
-        String vs = Gdx.files.internal("defaultVS.glsl").readString();
-        String fs = Gdx.files.internal("defaultFS.glsl").readString();
+        String vs = Gdx.files.internal("blinn-phong-vert.glsl").readString();
+        String fs = Gdx.files.internal("blinn-phong-frag.glsl").readString();
         shaderProgram = new ShaderProgram(vs, fs);
+        System.out.print(shaderProgram.getAttributes());
         ModelLoader<?> loader = new ObjLoader();
         ModelData data = loader.loadModelData(Gdx.files.internal("ship.obj"));
         spaceshipMesh = new Mesh(true,
@@ -73,6 +74,18 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         img.bind();
         shaderProgram.begin();
         shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix());
+        shaderProgram.setUniformMatrix("u_modelView", camera.getVMatrix());
+        shaderProgram.setUniform4fv("matSpecular", new float[]{1f,1f,1f,1f}, 0, 4);
+        shaderProgram.setUniform4fv("matAmbient", new float[]{1f,1f,1f,1f}, 0, 4);
+        shaderProgram.setUniform4fv("matDiffuse", new float[]{1f,1f,1f,1f}, 0, 4);
+        shaderProgram.setUniformf("matShininess", 3f);
+        shaderProgram.setUniform4fv("lightSpecular", new float[]{1f,1f,1f,1f}, 0, 4);
+        shaderProgram.setUniform4fv("lightAmbient", new float[]{1f,1f,1f,1f}, 0, 4);
+        shaderProgram.setUniform4fv("lightDiffuse", new float[]{1f,1f,1f,1f}, 0, 4);
+        shaderProgram.setUniform4fv("globalAmbient", new float[]{1f,1f,1f,1f}, 0, 4);
+        shaderProgram.setUniform3fv("normal", new float[]{1f,1f,1f}, 0, 3);
+        shaderProgram.setUniform3fv("L", new float[]{1f,1f,1f}, 0, 3);
+
 //        shaderProgram.setUniformMatrix("u_worldView", cam.combined);
 //        System.out.println(camera.getPVMatrix());
 //        System.out.println(cam.combined);
