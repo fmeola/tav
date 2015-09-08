@@ -1,6 +1,7 @@
 
 
 varying vec2 v_texCoords;
+varying vec3 normal; //normal eye space
 
 uniform mat4 u_worldView;
 
@@ -11,6 +12,7 @@ void main()
 {
 	gl_Position = u_worldView * a_position;
 	v_texCoords = a_texCoord0;
+	normal = gl_NormalMatrix * gl_Normal;
 }
 
 

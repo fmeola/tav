@@ -8,10 +8,12 @@ import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
+import com.badlogic.gdx.graphics.g3d.model.data.ModelMaterial;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.camera.MyGdxPerspectiveCamera;
@@ -22,6 +24,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private Texture img;
     private Mesh spaceshipMesh;
     private ShaderProgram shaderProgram;
+//    private Array<ModelMaterial> spaceshipMaterials;
 
     private MyCamera camera;
     private Camera cam;
@@ -35,9 +38,10 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         String vs = Gdx.files.internal("blinn-phong-vert.glsl").readString();
         String fs = Gdx.files.internal("blinn-phong-frag.glsl").readString();
         shaderProgram = new ShaderProgram(vs, fs);
-        System.out.print(shaderProgram.getAttributes());
+        System.out.print(shaderProgram.getLog());
         ModelLoader<?> loader = new ObjLoader();
         ModelData data = loader.loadModelData(Gdx.files.internal("ship.obj"));
+//        spaceshipMaterials = data.materials;
         spaceshipMesh = new Mesh(true,
                 data.meshes.get(0).vertices.length,
                 data.meshes.get(0).parts[0].indices.length,
@@ -74,16 +78,14 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         img.bind();
         shaderProgram.begin();
         shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix());
-        shaderProgram.setUniformMatrix("u_modelView", camera.getVMatrix());
-        shaderProgram.setUniform4fv("matSpecular", new float[]{1f,1f,1f,1f}, 0, 4);
-        shaderProgram.setUniform4fv("matAmbient", new float[]{1f,1f,1f,1f}, 0, 4);
-        shaderProgram.setUniform4fv("matDiffuse", new float[]{1f,1f,1f,1f}, 0, 4);
-        shaderProgram.setUniformf("matShininess", 3f);
-        shaderProgram.setUniform4fv("lightSpecular", new float[]{1f,1f,1f,1f}, 0, 4);
-        shaderProgram.setUniform4fv("lightAmbient", new float[]{1f,1f,1f,1f}, 0, 4);
-        shaderProgram.setUniform4fv("lightDiffuse", new float[]{1f,1f,1f,1f}, 0, 4);
-        shaderProgram.setUniform4fv("globalAmbient", new float[]{1f,1f,1f,1f}, 0, 4);
-        shaderProgram.setUniform3fv("normal", new float[]{1f,1f,1f}, 0, 3);
+//        shaderProgram.setUniform4fv("matSpecular", new float[]{1f,1f,1f,1f}, 0, 4);
+//        shaderProgram.setUniform4fv("matAmbient", new float[]{1f,1f,1f,1f}, 0, 4);
+//        shaderProgram.setUniform4fv("matDiffuse", new float[]{1f,1f,1f,1f}, 0, 4);
+//        shaderProgram.setUniformf("matShininess", 3f);
+        shaderProgram.setUniform4fv("lightSpecular", new float[]{0.2f,0.5f,0.2f,1f}, 0, 4);
+        shaderProgram.setUniform4fv("lightAmbient", new float[]{0.7f,0.7f,0.7f,1f}, 0, 4);
+        shaderProgram.setUniform4fv("lightDiffuse", new float[]{0f,0f,0f,1f}, 0, 4);
+        shaderProgram.setUniform4fv("globalAmbient", new float[]{0.7f,0.7f,0.7f,1f}, 0, 4);
         shaderProgram.setUniform3fv("L", new float[]{1f,1f,1f}, 0, 3);
 
 //        shaderProgram.setUniformMatrix("u_worldView", cam.combined);
