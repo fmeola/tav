@@ -1,5 +1,3 @@
-
-
 varying vec2 v_texCoords;
 varying vec3 normal; //normal eye space
 

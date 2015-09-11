@@ -18,6 +18,7 @@ import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.camera.MyGdxPerspectiveCamera;
 import com.mygdx.camera.Rotation;
+import com.mygdx.light.MyLight;
 
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
@@ -31,6 +32,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     
     private int mousePositionX;
     private int mousePositionY;
+
+    private MyLight light;
 
     @Override
     public void create () {
@@ -64,11 +67,18 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 //        camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera = new MyGdxOrthographicCamera(3, 3 * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
         camera.position.set(0f, 0f, 10f);
-        camera.lookAt(0,0,0);
+        camera.lookAt(0, 0, 0);
         camera.near = 0.1f;
         camera.far = 300f;
 
         Gdx.input.setInputProcessor(this);
+
+        float[] position = new float[]{1f, 1f, 1f};
+        light = new MyLight(shaderProgram, position);
+        light.setAmbientLight(Color.GREEN);
+        light.setSpecularLight(Color.LIGHT_GRAY);
+        light.setDiffuseLight(Color.RED);
+        light.setGlobalAmbientLight(Color.YELLOW);
     }
 
     @Override
@@ -82,15 +92,13 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 //        shaderProgram.setUniform4fv("matAmbient", new float[]{1f,1f,1f,1f}, 0, 4);
 //        shaderProgram.setUniform4fv("matDiffuse", new float[]{1f,1f,1f,1f}, 0, 4);
 //        shaderProgram.setUniformf("matShininess", 3f);
-        shaderProgram.setUniform4fv("lightSpecular", new float[]{0.2f,0.5f,0.2f,1f}, 0, 4);
-        shaderProgram.setUniform4fv("lightAmbient", new float[]{0.7f,0.7f,0.7f,1f}, 0, 4);
-        shaderProgram.setUniform4fv("lightDiffuse", new float[]{0f,0f,0f,1f}, 0, 4);
-        shaderProgram.setUniform4fv("globalAmbient", new float[]{0.7f,0.7f,0.7f,1f}, 0, 4);
-        shaderProgram.setUniform3fv("L", new float[]{1f,1f,1f}, 0, 3);
-
+//        shaderProgram.setUniform4fv("lightSpecular", new float[]{0.2f,0.5f,0.2f,1f}, 0, 4);
+//        shaderProgram.setUniform4fv("lightAmbient", new float[]{0f,0.9f,0f,1f}, 0, 4);
+//        shaderProgram.setUniform4fv("lightDiffuse", new float[]{0f,0f,0f,1f}, 0, 4);
+//        shaderProgram.setUniform4fv("globalAmbient", new float[]{0.7f,0.7f,0.7f,1f}, 0, 4);
+//        shaderProgram.setUniform3fv("L", new float[]{1f,1f,1f}, 0, 3);
+        light.render();
 //        shaderProgram.setUniformMatrix("u_worldView", cam.combined);
-//        System.out.println(camera.getPVMatrix());
-//        System.out.println(cam.combined);
         shaderProgram.setUniformi("u_texture", 0);
         spaceshipMesh.render(shaderProgram, GL20.GL_TRIANGLES);
         shaderProgram.end();

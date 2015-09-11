@@ -1,11 +1,11 @@
 varying vec2 v_texCoords;
 varying vec3 normal;
+
 uniform vec3 L; //direction of light, normalized
 uniform vec4 lightSpecular;
 uniform vec4 lightAmbient;
 uniform vec4 lightDiffuse;
 uniform vec4 globalAmbient;
-
 uniform sampler2D u_texture;
 
 void main()
