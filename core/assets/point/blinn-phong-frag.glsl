@@ -4,7 +4,7 @@ varying vec3 normal; //normal eye space
 uniform vec3 L; //direction of light, normalized
 uniform vec4 lightSpecular;
 uniform vec4 lightAmbient;
-uniform vec4 lightDiffuse;
+uniform vec4 lightColor;
 uniform vec4 globalAmbient;
 uniform sampler2D u_texture;
 
@@ -20,7 +20,7 @@ void main()
 
     // Compute the diffuse term
     float diffuseLight = max(dot(normal,L), 0.0);
-    vec4 diffuse = gl_FrontMaterial.diffuse * lightDiffuse * diffuseLight;
+    vec4 diffuse = gl_FrontMaterial.diffuse * lightColor * diffuseLight;
 
     // Compute the specular term
     float specularLight = pow(max(0.0,dot(normal,H)), gl_FrontMaterial.shininess);

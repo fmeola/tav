@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelMaterial;
@@ -18,7 +19,7 @@ import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.camera.MyGdxPerspectiveCamera;
 import com.mygdx.camera.Rotation;
-import com.mygdx.light.MyLight;
+import com.mygdx.light.MyPointLight;
 
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
@@ -33,15 +34,17 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private int mousePositionX;
     private int mousePositionY;
 
-    private MyLight light;
+    private MyPointLight light;
 
     @Override
     public void create () {
         img = new Texture("ship.png");
-        String vs = Gdx.files.internal("blinn-phong-vert.glsl").readString();
-        String fs = Gdx.files.internal("blinn-phong-frag.glsl").readString();
-        shaderProgram = new ShaderProgram(vs, fs);
-        System.out.print(shaderProgram.getLog());
+        light = new MyPointLight();
+        shaderProgram = light.getShaderProgram();
+//        String vs = Gdx.files.internal("blinn-phong-vert.glsl").readString();
+//        String fs = Gdx.files.internal("blinn-phong-frag.glsl").readString();
+//        shaderProgram = new ShaderProgram(vs, fs);
+//        System.out.print(shaderProgram.getLog());
         ModelLoader<?> loader = new ObjLoader();
         ModelData data = loader.loadModelData(Gdx.files.internal("ship.obj"));
 //        spaceshipMaterials = data.materials;
@@ -74,10 +77,10 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         Gdx.input.setInputProcessor(this);
 
         float[] position = new float[]{1f, 1f, 1f};
-        light = new MyLight(shaderProgram, position);
+        light.setPosition(position);
         light.setAmbientLight(Color.GREEN);
         light.setSpecularLight(Color.LIGHT_GRAY);
-        light.setDiffuseLight(Color.RED);
+        light.setLightColor(Color.RED);
         light.setGlobalAmbientLight(Color.YELLOW);
     }
 
