@@ -1,5 +1,5 @@
 varying vec2 v_texCoords;
-varying vec3 normal;
+varying vec3 normal; //normal eye space
 
 uniform vec3 L; //direction of light, normalized
 uniform vec4 lightSpecular;
@@ -10,11 +10,24 @@ uniform sampler2D u_texture;
 
 void main()
 {
-    vec3 H = normalize(L+vec3(0,0,1));
-    float var = dot(gl_FrontMaterial.specular,lightSpecular)*pow(max(0.0,dot(normal,H)), gl_FrontMaterial.shininess);
-    if (var < 0.0) var = 0.0;
-    gl_FragColor = gl_FrontMaterial.emission + 
-        texture2D(u_texture, v_texCoords) * (gl_FrontMaterial.ambient*(globalAmbient + lightAmbient) +
-        gl_FrontMaterial.diffuse*lightDiffuse*max(0.0,dot(normal,L)) + 
-        var);
+    vec3 H = normalize(L + vec3(0,0,1));
+
+    // Compute emissive term
+    vec4 emissive = gl_FrontMaterial.emission;
+
+    // Compute ambient term
+    vec4 ambient = gl_FrontMaterial.ambient * (globalAmbient + lightAmbient);
+
+    // Compute the diffuse term
+    float diffuseLight = max(dot(normal,L), 0.0);
+    vec4 diffuse = gl_FrontMaterial.diffuse * lightDiffuse * diffuseLight;
+
+    // Compute the specular term
+    float specularLight = pow(max(0.0,dot(normal,H)), gl_FrontMaterial.shininess);
+    if (diffuseLight <= 0.0)
+        specularLight = 0.0;
+    float specular = dot(gl_FrontMaterial.specular,lightSpecular) * specularLight;
+
+    gl_FragColor = emissive +
+        texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
 }
