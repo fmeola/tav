@@ -22,6 +22,7 @@ public class MySpotLight extends MyLight {
 
     public void render() {
         super.render();
+        shaderProgram.setUniform3fv("lightPosition", position, 0, position.length);
     }
 
 }

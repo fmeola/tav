@@ -2,20 +2,20 @@ varying vec2 v_texCoords;
 varying vec3 normal; //normal eye space
 varying vec4 position; //position of point, eye space
 
-uniform vec3 lightPosition; //position of light, eye space
+uniform vec3 direction; 
 uniform vec3 cameraPosition; //position of camera, eye space
 uniform vec4 lightSpecular;
 uniform vec4 lightAmbient;
 uniform vec4 lightColor;
 uniform vec4 globalAmbient;
 uniform vec4 matSpecular, matAmbient, matDiffuse;
-uniform float matShininess;
+uniform float shininess;
 uniform sampler2D u_texture;
 
 void main()
 {
-    vec3 L = lightPosition - position.xyz;
-    L = normalize(L);
+    vec3 L = normalize(direction);
+    
     
     // Compute the diffuse term
     float diffuseLight = max(dot(normal,L), 0.0);
@@ -32,8 +32,7 @@ void main()
     //vec4 emissive = gl_FrontMaterial.emission;
 
     // Compute ambient term
-    //vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
-    vec4 ambient = vec4(0.,0.,0.,1.);
+    vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
     
 
     gl_FragColor = //emissive +

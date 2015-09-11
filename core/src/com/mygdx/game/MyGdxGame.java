@@ -19,12 +19,16 @@ import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.camera.MyGdxPerspectiveCamera;
 import com.mygdx.camera.Rotation;
+import com.mygdx.light.MyDirectionalLight;
+import com.mygdx.light.MyLight;
 import com.mygdx.light.MyPointLight;
+import com.mygdx.material.Material;
 
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
     private Texture img;
     private Mesh spaceshipMesh;
+    private Material spaceshipMaterial;
     private ShaderProgram shaderProgram;
 //    private Array<ModelMaterial> spaceshipMaterials;
 
@@ -34,7 +38,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private int mousePositionX;
     private int mousePositionY;
 
-    private MyPointLight light;
+    private MyLight light; 
+    
 
     @Override
     public void create () {
@@ -56,6 +61,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         spaceshipMesh.setIndices(data.meshes.get(0).parts[0].indices);
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
         Gdx.gl.glDepthFunc(Gdx.gl.GL_LESS);
+        
+        spaceshipMaterial = new Material();
 
         // Cámaras de libdx
 //        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -69,18 +76,18 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         // Nuestras Cámaras
 //        camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera = new MyGdxOrthographicCamera(3, 3 * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
-        camera.position.set(0f, 0f, 10f);
+        camera.position.set(0f, 0f, 2f);
         camera.lookAt(0, 0, 0);
         camera.near = 0.1f;
         camera.far = 300f;
 
         Gdx.input.setInputProcessor(this);
 
-        float[] position = new float[]{1f, 1f, 1f};
+        float[] position = new float[]{0f, 2f, 0f};
         light.setPosition(position);
         light.setAmbientLight(Color.GREEN);
         light.setSpecularLight(Color.LIGHT_GRAY);
-        light.setLightColor(Color.RED);
+        light.setLightColor(Color.GREEN);
         light.setGlobalAmbientLight(Color.YELLOW);
     }
 
@@ -91,10 +98,11 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         img.bind();
         shaderProgram.begin();
         shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix());
-//        shaderProgram.setUniform4fv("matSpecular", new float[]{1f,1f,1f,1f}, 0, 4);
-//        shaderProgram.setUniform4fv("matAmbient", new float[]{1f,1f,1f,1f}, 0, 4);
-//        shaderProgram.setUniform4fv("matDiffuse", new float[]{1f,1f,1f,1f}, 0, 4);
-//        shaderProgram.setUniformf("matShininess", 3f);
+        shaderProgram.setUniform3fv("cameraPosition", new float[] {camera.position.x, camera.position.y, camera.position.z},0, 3);
+        shaderProgram.setUniform4fv("matSpecular", spaceshipMaterial.specular, 0, 4);
+        //shaderProgram.setUniform4fv("matAmbient", spaceshipMaterial.ambient, 0, 4);
+        shaderProgram.setUniform4fv("matDiffuse", spaceshipMaterial.diffuse, 0, 4);
+        shaderProgram.setUniformf("matShininess", spaceshipMaterial.shininess);
 //        shaderProgram.setUniform4fv("lightSpecular", new float[]{0.2f,0.5f,0.2f,1f}, 0, 4);
 //        shaderProgram.setUniform4fv("lightAmbient", new float[]{0f,0.9f,0f,1f}, 0, 4);
 //        shaderProgram.setUniform4fv("lightDiffuse", new float[]{0f,0f,0f,1f}, 0, 4);

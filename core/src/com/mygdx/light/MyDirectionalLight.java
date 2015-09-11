@@ -2,8 +2,8 @@ package com.mygdx.light;
 
 public class MyDirectionalLight extends MyLight {
 
-    private static final String vsPath = "directional/blinn-phong-vert.glsl";
-    private static final String fsPath = "directional/blinn-phong-frag.glsl";
+    private static final String vsPath = "directional/direct-blinn-phong-vert.glsl";
+    private static final String fsPath = "directional/direct-blinn-phong-frag.glsl";
 
     public MyDirectionalLight() {
         super(vsPath, fsPath);
@@ -11,7 +11,7 @@ public class MyDirectionalLight extends MyLight {
 
     public void render() {
         super.render();
-
+        shaderProgram.setUniform3fv("direction", position, 0, 3);
     }
 
 }
