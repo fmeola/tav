@@ -6,23 +6,17 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
-import com.badlogic.gdx.graphics.g3d.model.data.ModelMaterial;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
-import com.mygdx.camera.MyGdxPerspectiveCamera;
-import com.mygdx.camera.Rotation;
-import com.mygdx.light.MyDirectionalLight;
 import com.mygdx.light.MyLight;
 import com.mygdx.light.MyPointLight;
 import com.mygdx.material.Material;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
@@ -30,52 +24,38 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private Mesh spaceshipMesh;
     private Material spaceshipMaterial;
     private ShaderProgram shaderProgram;
-//    private Array<ModelMaterial> spaceshipMaterials;
 
-    private MyCamera camera;
-    private Camera cam;
-    
     private int mousePositionX;
     private int mousePositionY;
 
-    private MyLight light; 
-    
+    private MyCamera camera;
+    private MyLight light;
+
+    private List<DisplayableObject> spaceships = new ArrayList<>();
 
     @Override
     public void create () {
         img = new Texture("ship.png");
         light = new MyPointLight();
         shaderProgram = light.getShaderProgram();
-//        String vs = Gdx.files.internal("blinn-phong-vert.glsl").readString();
-//        String fs = Gdx.files.internal("blinn-phong-frag.glsl").readString();
-//        shaderProgram = new ShaderProgram(vs, fs);
-//        System.out.print(shaderProgram.getLog());
         ModelLoader<?> loader = new ObjLoader();
         ModelData data = loader.loadModelData(Gdx.files.internal("ship.obj"));
-//        spaceshipMaterials = data.materials;
         spaceshipMesh = new Mesh(true,
                 data.meshes.get(0).vertices.length,
                 data.meshes.get(0).parts[0].indices.length,
                 VertexAttribute.Position(), VertexAttribute.Normal(), VertexAttribute.TexCoords(0));
         spaceshipMesh.setVertices(data.meshes.get(0).vertices);
         spaceshipMesh.setIndices(data.meshes.get(0).parts[0].indices);
+
+        spaceships.add(new DisplayableObject(spaceshipMesh, new Vector3(-1.5f, 0, 0)));
+        spaceships.add(new DisplayableObject(spaceshipMesh, new Vector3(0, 0, 0)));
+        spaceships.add(new DisplayableObject(spaceshipMesh, new Vector3(1.5f, 0, 0)));
+
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
         Gdx.gl.glDepthFunc(Gdx.gl.GL_LESS);
-        
         spaceshipMaterial = new Material();
-
-        // Cámaras de libdx
-//        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        cam = new OrthographicCamera(3, 3 * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
-//        cam.position.set(1f, 1f, 1f);
-//        cam.lookAt(0,0,0);
-//        cam.near = 1f;
-//        cam.far = 300f;
-//        cam.update();
-
-        // Nuestras Cámaras
 //        camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera = new MyGdxOrthographicCamera(3, 3 * ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
+        camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera.position.set(0f, 0f, 2f);
         camera.lookAt(0, 0, 0);
         camera.near = 0.1f;
@@ -97,21 +77,16 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         img.bind();
         shaderProgram.begin();
-        shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix());
         shaderProgram.setUniform3fv("cameraPosition", new float[] {camera.position.x, camera.position.y, camera.position.z},0, 3);
         shaderProgram.setUniform4fv("matSpecular", spaceshipMaterial.specular, 0, 4);
-        //shaderProgram.setUniform4fv("matAmbient", spaceshipMaterial.ambient, 0, 4);
         shaderProgram.setUniform4fv("matDiffuse", spaceshipMaterial.diffuse, 0, 4);
         shaderProgram.setUniformf("matShininess", spaceshipMaterial.shininess);
-//        shaderProgram.setUniform4fv("lightSpecular", new float[]{0.2f,0.5f,0.2f,1f}, 0, 4);
-//        shaderProgram.setUniform4fv("lightAmbient", new float[]{0f,0.9f,0f,1f}, 0, 4);
-//        shaderProgram.setUniform4fv("lightDiffuse", new float[]{0f,0f,0f,1f}, 0, 4);
-//        shaderProgram.setUniform4fv("globalAmbient", new float[]{0.7f,0.7f,0.7f,1f}, 0, 4);
-//        shaderProgram.setUniform3fv("L", new float[]{1f,1f,1f}, 0, 3);
         light.render();
-//        shaderProgram.setUniformMatrix("u_worldView", cam.combined);
         shaderProgram.setUniformi("u_texture", 0);
-        spaceshipMesh.render(shaderProgram, GL20.GL_TRIANGLES);
+        for(DisplayableObject spaceship : spaceships) {
+            shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix().mul(spaceship.getTMatrix()));
+            spaceship.getMesh().render(shaderProgram, GL20.GL_TRIANGLES);
+        }
         shaderProgram.end();
 
         /**
