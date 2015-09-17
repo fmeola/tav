@@ -7,6 +7,7 @@ uniform mat4 u_worldView;
 
 attribute vec4 a_position;
 attribute vec2 a_texCoord0;
+attribute vec3 a_normal;
 
 void main()
 {

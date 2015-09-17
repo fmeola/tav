@@ -25,9 +25,9 @@ public abstract class MyLight {
 
     public void render() {
         shaderProgram.setUniform4fv("lightColor", lightColor, 0, lightColor.length);
-        //shaderProgram.setUniform4fv("lightAmbient", ambientLight, 0, ambientLight.length);
+        shaderProgram.setUniform4fv("lightAmbient", ambientLight, 0, ambientLight.length);
         shaderProgram.setUniform4fv("lightSpecular", specularLight, 0, specularLight.length);
-        //shaderProgram.setUniform4fv("globalAmbient", globalAmbientLight, 0, globalAmbientLight.length);
+        shaderProgram.setUniform4fv("globalAmbient", globalAmbientLight, 0, globalAmbientLight.length);
     }
 
     public MyLight() {

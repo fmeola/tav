@@ -32,10 +32,11 @@ void main()
     //vec4 emissive = gl_FrontMaterial.emission;
 
     // Compute ambient term
-    //vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
-    vec4 ambient = vec4(0.,0.,0.,1.);
+    vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
+    //vec4 ambient = vec4(0.,0.,0.,1.);
     
 
     gl_FragColor = //emissive +
         texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
+
 }

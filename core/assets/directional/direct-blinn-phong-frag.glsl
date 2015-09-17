@@ -9,7 +9,7 @@ uniform vec4 lightAmbient;
 uniform vec4 lightColor;
 uniform vec4 globalAmbient;
 uniform vec4 matSpecular, matAmbient, matDiffuse;
-uniform float shininess;
+uniform float matShininess;
 uniform sampler2D u_texture;
 
 void main()
