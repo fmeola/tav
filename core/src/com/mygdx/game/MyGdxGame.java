@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
@@ -21,9 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
-
     
-    private Texture img;
+    private Texture img, imgQuad;
     private Mesh spaceshipMesh;
     private Material spaceshipMaterial, quadMaterial;
     private ShaderProgram shaderProgram;
@@ -40,18 +40,22 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public void create () {
-        quad = new Mesh(true, 4, 6, new VertexAttribute(Usage.Position, 3, "a_position"));
-        quad.setVertices(new float[] {
-            -4f, -0.5f, 3f,
-            3f, -0.5f, 3f,
-            3f, -0.5f, -3f,
-            -4f, -0.5f, -3f
+        quad = new Mesh(true, 4, 6, new VertexAttribute(Usage.Position, 4, "a_position"), new VertexAttribute(Usage.Normal, 3, "a_normal"), new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord0"));
+        //quad = new Mesh(true, 4, 6, new VertexAttribute(Usage.Position, 4, "a_position"), new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord0"));
+        quad.setVertices(new float[] { //position, normal, texCoord
+            -4f, -0.5f, 1f, 1f, 0f, 1f, 0f, 0f, 0f,
+            3f, -0.5f, 1f, 1f, 0f, 1f, 0f, 1f, 0f,
+            3f, -0.5f, -1f, 1f, 0f, 1f, 0f, 1f, 1f,
+            -4f, -0.5f, -1f, 1f, 0f, 1f, 0f, 0f, 1f
         });
- 
+        
         quad.setIndices(new short[] {0,1,2,2,3,0});
         quadMaterial = new Material();
+        
+        
         img = new Texture("ship.png");
-        light = new MyDirectionalLight();
+        imgQuad = new Texture("quad/textureQuad.png");
+        light = new MyPointLight();
         shaderProgram = light.getShaderProgram();
         ModelLoader<?> loader = new ObjLoader();
         ModelData data = loader.loadModelData(Gdx.files.internal("ship.obj"));
@@ -59,6 +63,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
                 data.meshes.get(0).vertices.length,
                 data.meshes.get(0).parts[0].indices.length,
                 VertexAttribute.Position(), VertexAttribute.Normal(), VertexAttribute.TexCoords(0));
+                //VertexAttribute.Position(), VertexAttribute.TexCoords(0));
         spaceshipMesh.setVertices(data.meshes.get(0).vertices);
         spaceshipMesh.setIndices(data.meshes.get(0).parts[0].indices);
 
@@ -78,11 +83,11 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
         Gdx.input.setInputProcessor(this);
 
-        float[] position = new float[]{0f, 1f, 0f};
+        float[] position = new float[]{0f, 3f, 0f};
         light.setPosition(position);
-        light.setAmbientLight(Color.GREEN);
+        light.setAmbientLight(new float[]{0.7f,0.7f,0.7f,1f});
         light.setSpecularLight(Color.LIGHT_GRAY);
-        light.setLightColor(Color.GREEN);
+        light.setLightColor(new float[]{0.7f,0.7f,0.7f,1f});
         light.setGlobalAmbientLight(Color.YELLOW);
     }
 
@@ -90,15 +95,25 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     public void render () {
         Gdx.gl.glClearColor(255, 255, 255, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        img.bind();
         shaderProgram.begin();
         shaderProgram.setUniform3fv("cameraPosition", new float[] {camera.position.x, camera.position.y, camera.position.z},0, 3);
+        
+        //render light
+        light.render();
+        
+        //render quad
+        imgQuad.bind();
+        shaderProgram.setUniform4fv("matSpecular", quadMaterial.specular, 0, 4);
+        shaderProgram.setUniform4fv("matDiffuse", quadMaterial.diffuse, 0, 4);
+        shaderProgram.setUniformf("matShininess", quadMaterial.shininess);
+        quad.render(shaderProgram, GL20.GL_TRIANGLES);
+        
+        //render spaceships
+        img.bind();
         shaderProgram.setUniform4fv("matSpecular", spaceshipMaterial.specular, 0, 4);
         shaderProgram.setUniform4fv("matDiffuse", spaceshipMaterial.diffuse, 0, 4);
         shaderProgram.setUniformf("matShininess", spaceshipMaterial.shininess);
-        light.render();
         shaderProgram.setUniformi("u_texture", 0);
-        quad.render(shaderProgram, GL20.GL_TRIANGLES);
         for(DisplayableObject spaceship : spaceships) {
             shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix().mul(spaceship.getTMatrix()));
             spaceship.getMesh().render(shaderProgram, GL20.GL_TRIANGLES);
@@ -155,12 +170,12 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     public boolean mouseMoved(int screenX, int screenY) {
         float value;
         if (screenX != mousePositionX) {
-            value = screenX > mousePositionX ? -0.005f : 0.005f;
+            value = screenX > mousePositionX ? -0.01f : 0.01f;
             camera.rotX += value;
             mousePositionX = screenX;
         }
         if (screenY != mousePositionY) {
-            value = screenY > mousePositionY ? -0.005f : 0.005f;
+            value = screenY > mousePositionY ? -0.01f : 0.01f;
             camera.rotY += value;
             mousePositionY = screenY;
         }

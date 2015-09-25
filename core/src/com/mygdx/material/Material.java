@@ -12,8 +12,8 @@ import java.awt.Color;
  * @author picosat
  */
 public class Material {
-    public float[] diffuse = {0f,1f,0f,1f};
-    public float[] specular = {0f,0f,0f,1f};
+    public float[] diffuse = {1f,0f,0f,1f};
+    public float[] specular = {1f,0f,0f,1f};
     public float[] ambient = {1f,0f,0f,1f};
     public float shininess = 0.1f;
 
