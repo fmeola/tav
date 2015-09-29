@@ -2,12 +2,15 @@ varying vec2 v_texCoords;
 varying vec3 normal; //normal eye space
 varying vec4 position; //position of point, eye space
 
+//light uniforms
 uniform vec3 direction; 
 uniform vec3 cameraPosition; //position of camera, eye space
 uniform vec4 lightSpecular;
 uniform vec4 lightAmbient;
 uniform vec4 lightColor;
 uniform vec4 globalAmbient;
+
+//material uniforms
 uniform vec4 matSpecular, matAmbient, matDiffuse;
 uniform float matShininess;
 uniform sampler2D u_texture;

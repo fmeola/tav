@@ -18,6 +18,7 @@ import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.light.MyDirectionalLight;
 import com.mygdx.light.MyLight;
 import com.mygdx.light.MyPointLight;
+import com.mygdx.light.MySpotLight;
 import com.mygdx.material.Material;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +45,10 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         quad = new Mesh(true, 4, 6, new VertexAttribute(Usage.Position, 4, "a_position"), new VertexAttribute(Usage.Normal, 3, "a_normal"), new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord0"));
         //quad = new Mesh(true, 4, 6, new VertexAttribute(Usage.Position, 4, "a_position"), new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord0"));
         quad.setVertices(new float[] { //position, normal, texCoord
-            -4f, 0f, 1f, 1f, 0f, 1f, 0f, 0f, 0f,
-            3f, 0f, 1f, 1f, 0f, 1f, 0f, 1f, 0f,
-            3f, 0f, -1f, 1f, 0f, 1f, 0f, 1f, 1f,
-            -4f, 0f, -1f, 1f, 0f, 1f, 0f, 0f, 1f
+            -4f, -0.5f, 1f, 1f, 0f, 1f, 0f, 0f, 0f,
+            3f, -0.5f, 1f, 1f, 0f, 1f, 0f, 1f, 0f,
+            3f, -0.5f, -1f, 1f, 0f, 1f, 0f, 1f, 1f,
+            -4f, -0.5f, -1f, 1f, 0f, 1f, 0f, 0f, 1f
         });
         
         quad.setIndices(new short[] {0,1,2,2,3,0});
@@ -59,7 +60,9 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         
         img = new Texture("ship.png");
         imgQuad = new Texture("quad/textureQuad.png");
-        light = new MyDirectionalLight();
+        light = new MySpotLight(new float[]{0f,1f,0f,0f}, 20f);
+        //light = new MyPointLight();
+        //light.setDirection(new float[]{0f,-1f,0f,0f});
         shaderProgram = light.getShaderProgram();
         ModelLoader<?> loader = new ObjLoader();
         ModelData data = loader.loadModelData(Gdx.files.internal("ship.obj"));
@@ -87,7 +90,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
         Gdx.input.setInputProcessor(this);
 
-        float[] position = new float[]{0f, 1f, 0f};
+        float[] position = new float[]{0f, 3f, 0f};
         light.setPosition(position);
         light.setAmbientLight(new float[]{0.5f,0.5f,0.5f,1f});
         light.setSpecularLight(new float[]{0f,1f,0f,1f});
