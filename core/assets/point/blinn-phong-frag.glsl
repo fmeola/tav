@@ -21,22 +21,17 @@ void main()
     float diffuseLight = max(dot(normal,L), 0.0);
     vec4 diffuse = matDiffuse * lightColor * diffuseLight;
 
-    vec3 V = cameraPosition - position.xyz;
+    vec3 V = normalize(cameraPosition - position.xyz);
     vec3 H = normalize(L + V);
 
     // Compute the specular term
-    float specularLight = pow(max(0.0,dot(normal,H)), matShininess);
-    float specular = dot(matSpecular, lightSpecular) * specularLight;
-
-    // Compute emissive term
-    //vec4 emissive = gl_FrontMaterial.emission;
+    float specularHardness = pow(max(0.0,dot(H,normal)), matShininess);
+    vec4 specular = matSpecular * lightSpecular * specularHardness;
 
     // Compute ambient term
     vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
-    //vec4 ambient = vec4(0.,0.,0.,1.);
     
 
-    gl_FragColor = //emissive +
-        texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
+    gl_FragColor = texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
 
 }

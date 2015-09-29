@@ -4,6 +4,7 @@ varying vec4 position; //position of point, eye space
 
 
 uniform mat4 u_worldView;
+uniform mat4 u_normalMatrix;
 
 attribute vec4 a_position;
 attribute vec3 a_normal;
@@ -14,7 +15,7 @@ void main()
 	gl_Position = u_worldView * a_position;
         position = u_worldView * a_position;
 	v_texCoords = a_texCoord0;
-	normal = a_normal;//gl_NormalMatrix * a_normal;
+	normal = normalize(u_normalMatrix * vec4(a_normal,0.0)).xyz;
 }
 
 

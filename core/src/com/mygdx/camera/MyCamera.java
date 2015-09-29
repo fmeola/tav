@@ -41,5 +41,9 @@ public abstract class MyCamera {
     public Matrix4 getPVMatrix() {
         return getPMatrix().mul(getVMatrix());
     }
+    
+    public Matrix4 getNormalMatrix() {
+        return this.getVMatrix().inv().tra();
+    }
 
 }
