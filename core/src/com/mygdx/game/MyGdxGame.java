@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
@@ -111,7 +112,11 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         shaderProgram.setUniformf("matShininess", quadMaterial.shininess);
         shaderProgram.setUniform4fv("matAmbient", quadMaterial.ambient, 0, 4);
         shaderProgram.setUniformi("u_texture", 0);
-        shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix());
+        shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix().mul(new Matrix4(new float[]{ 1,0,0,0,
+                0,1,0,0,
+                0,0,1,0,
+                0,-0.5f,0,1
+        })));
         shaderProgram.setUniformMatrix("u_normalMatrix", camera.getNormalMatrix());
         quad.render(shaderProgram, GL20.GL_TRIANGLES);
         
