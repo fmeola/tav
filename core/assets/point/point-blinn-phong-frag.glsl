@@ -34,7 +34,5 @@ void main()
     // Compute ambient term
     vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
     
-
     gl_FragColor = texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
-
 }

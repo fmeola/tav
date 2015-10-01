@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.math.Vector3;
+
 import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.light.MyDirectionalLight;
@@ -71,10 +72,10 @@ public class GameElements {
 
     public static List<DisplayableObject> initSpaceships() {
         List<DisplayableObject> spaceships = new ArrayList<>();
-        Texture texture = new Texture("ship.png");
+        Texture texture = new Texture("ship/ship.png");
         Material material = new Material();
         ModelLoader loader = new ObjLoader();
-        ModelData data = loader.loadModelData(Gdx.files.internal("ship.obj"));
+        ModelData data = loader.loadModelData(Gdx.files.internal("ship/ship.obj"));
         Mesh mesh = new Mesh(true,
                 data.meshes.get(0).vertices.length,
                 data.meshes.get(0).parts[0].indices.length,

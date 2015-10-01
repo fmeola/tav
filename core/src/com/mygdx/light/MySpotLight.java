@@ -8,7 +8,7 @@ public class MySpotLight extends MyLight {
     private float[] direction; //(float3) The object-space direction of the light.
     private float cutOff; //in degrees
 
-    private static final String vsPath = "spot/spot-blinn-phong-vert.glsl";
+    private static final String vsPath = "blinn-phong-vert.glsl";
     private static final String fsPath = "spot/spot-blinn-phong-frag.glsl";
 
     public MySpotLight(float[] direction, float cutOff) {

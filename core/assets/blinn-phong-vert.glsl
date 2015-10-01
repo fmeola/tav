@@ -2,7 +2,6 @@ varying vec2 v_texCoords;
 varying vec3 normal; //normal eye space
 varying vec4 position; //position of point, eye space
 
-
 uniform mat4 u_worldView;
 uniform mat4 u_normalMatrix;
 

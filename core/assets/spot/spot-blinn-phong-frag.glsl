@@ -2,7 +2,6 @@ varying vec2 v_texCoords;
 varying vec3 normal; //normal eye space
 varying vec4 position; //position of point, eye space
 
-
 //light uniforms
 uniform vec3 lightPosition; //position of light, eye space
 uniform vec3 lightDirection; //direction of light, eye space
@@ -41,10 +40,9 @@ void main()
         // Compute ambient term
         vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
     
-
         gl_FragColor = texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
+    } else {
+        gl_FragColor = vec4(0.,0.,0.,1.);
     }
-    
-    else gl_FragColor = vec4(0.,0.,0.,1.);
 
 }

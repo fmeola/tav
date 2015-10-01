@@ -2,7 +2,7 @@ package com.mygdx.light;
 
 public class MyDirectionalLight extends MyLight {
 
-    private static final String vsPath = "directional/direct-blinn-phong-vert.glsl";
+    private static final String vsPath = "blinn-phong-vert.glsl";
     private static final String fsPath = "directional/direct-blinn-phong-frag.glsl";
 
     public MyDirectionalLight() {

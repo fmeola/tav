@@ -2,8 +2,8 @@ package com.mygdx.light;
 
 public class MyPointLight extends MyLight {
 
-    private static final String vsPath = "point/blinn-phong-vert.glsl";
-    private static final String fsPath = "point/blinn-phong-frag.glsl";
+    private static final String vsPath = "blinn-phong-vert.glsl";
+    private static final String fsPath = "point/point-blinn-phong-frag.glsl";
 
     public MyPointLight() {
         super(vsPath, fsPath);
