@@ -46,4 +46,8 @@ public abstract class MyCamera {
         return this.getVMatrix().inv().tra();
     }
 
+    public float[] getPosition() {
+        return new float[] {this.position.x, this.position.y, this.position.z};
+    }
+
 }
