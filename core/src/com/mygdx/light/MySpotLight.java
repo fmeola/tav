@@ -1,7 +1,5 @@
 package com.mygdx.light;
 
-import com.badlogic.gdx.graphics.Color;
-
 /**
  * http://www.3dgep.com/transformation-and-lighting-in-cg/#Spotlight_Effects
  */
@@ -25,7 +23,5 @@ public class MySpotLight extends MyLight {
         shaderProgram.setUniform3fv("lightDirection", direction, 0, direction.length);
         shaderProgram.setUniformf("spotCutOff", cutOff);
     }
-
-    
     
 }

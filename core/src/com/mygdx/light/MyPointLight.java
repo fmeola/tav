@@ -1,7 +1,5 @@
 package com.mygdx.light;
 
-import com.badlogic.gdx.graphics.Color;
-
 public class MyPointLight extends MyLight {
 
     private static final String vsPath = "point/blinn-phong-vert.glsl";
@@ -15,6 +13,5 @@ public class MyPointLight extends MyLight {
         super.render();
         shaderProgram.setUniform3fv("lightPosition", position, 0, position.length);
     }
-
     
 }

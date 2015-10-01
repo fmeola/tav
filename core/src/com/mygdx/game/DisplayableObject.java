@@ -1,17 +1,23 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.material.Material;
 
 public class DisplayableObject {
 
     private Vector3 position = new Vector3(0,0,0);
     private Mesh mesh;
+    private Texture texture;
+    private Material material;
 
-    public DisplayableObject(Mesh mesh, Vector3 position){
+    public DisplayableObject(Mesh mesh, Vector3 position, Texture texture, Material material){
         this.mesh = mesh;
         this.position = position;
+        this.texture = texture;
+        this.material = material;
     }
 
     public Mesh getMesh() {
@@ -27,4 +33,11 @@ public class DisplayableObject {
         return new Matrix4(values);
     }
 
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
 }
