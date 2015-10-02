@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import com.mygdx.camera.MyCamera;
+import com.mygdx.light.MyDirectionalLight;
 import com.mygdx.light.MyLight;
 
 import java.awt.Point;
@@ -18,6 +19,10 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private List<DisplayableObject> objects;
     private List<MyLight> lights;
+
+    private static final int LIGHT_MOVE_LIMIT = 100;
+    private int count = -LIGHT_MOVE_LIMIT;
+    private boolean rightDir = true;
 
     @Override
     public void create () {
@@ -57,6 +62,25 @@ public class MyGdxGame extends ApplicationAdapter {
 
             shaderProgram.setUniform3fv("cameraPosition", camera.getPosition(), 0, 3);
             shaderProgram.setUniformMatrix("u_normalMatrix", camera.getNormalMatrix());
+
+            /**
+             * Movimiento de la Directional Light
+             */
+            if(light instanceof MyDirectionalLight) {
+                float diff = 0.05f;
+                float lightPosition[] = light.getPosition();
+                if (rightDir) {
+                    count++;
+                    lightPosition[0] += diff;
+                } else {
+                    count--;
+                    lightPosition[0] -= diff;
+                }
+                if (count == LIGHT_MOVE_LIMIT || count == -LIGHT_MOVE_LIMIT) {
+                    rightDir = !rightDir;
+                }
+                light.setPosition(new float[]{lightPosition[0], lightPosition[1], lightPosition[2]});
+            }
 
             /**
              * Light Render

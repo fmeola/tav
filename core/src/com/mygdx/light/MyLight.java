@@ -102,4 +102,7 @@ public abstract class MyLight {
         this.globalAmbientLight = new float[]{globalAmbientLight.r, globalAmbientLight.g, globalAmbientLight.b, alpha};
     }
 
+    public float[] getPosition() {
+        return position;
+    }
 }
