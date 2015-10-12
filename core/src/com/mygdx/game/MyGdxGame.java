@@ -4,12 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.Matrix4;
 
 import com.mygdx.camera.MyCamera;
 import com.mygdx.light.MyDirectionalLight;
 import com.mygdx.light.MyLight;
-import com.mygdx.light.MySpotLight;
 
 import java.awt.Point;
 import java.util.List;
@@ -22,9 +20,10 @@ public class MyGdxGame extends ApplicationAdapter {
     private List<DisplayableObject> objects;
     private List<MyLight> lights;
 
-    private static final int LIGHT_MOVE_LIMIT = 100;
+    private static final int LIGHT_MOVE_LIMIT = 300;
     private int count = -LIGHT_MOVE_LIMIT;
     private boolean rightDir = true;
+    private boolean firstTime = true;
 
     @Override
     public void create () {
@@ -39,8 +38,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
         Gdx.gl.glDepthFunc(GL20.GL_LEQUAL);
         Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
 
         /**
          * Spaceships, quad, lights and camera.
@@ -54,11 +52,13 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void render () {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
         /**
          * Blending para varios shaders.
          */
         for(MyLight light: lights){
+            if(!firstTime){
+                Gdx.gl.glBlendFunc(GL20.GL_ONE,GL20.GL_ONE);
+            }
             ShaderProgram shaderProgram = light.getShaderProgram();
             shaderProgram.begin();
 
@@ -102,6 +102,7 @@ public class MyGdxGame extends ApplicationAdapter {
             }
 
             shaderProgram.end();
+            firstTime = false;
         }
     }
 
