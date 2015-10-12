@@ -11,7 +11,7 @@ public class MyDirectionalLight extends MyLight {
 
     public void render() {
         super.render();
-        shaderProgram.setUniform3fv("direction", position, 0, 3);
+        shaderProgram.setUniform4fv("direction", position, 0, 4);
     }
 
 }

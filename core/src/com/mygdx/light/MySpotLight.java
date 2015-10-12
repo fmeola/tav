@@ -5,7 +5,7 @@ package com.mygdx.light;
  */
 public class MySpotLight extends MyLight {
 
-    private float[] direction; //(float3) The object-space direction of the light.
+    private float[] direction; //(float4) The world-space direction of the light.
     private float cutOff; //in degrees
 
     private static final String vsPath = "blinn-phong-vert.glsl";
@@ -19,9 +19,19 @@ public class MySpotLight extends MyLight {
 
     public void render() {
         super.render();
-        shaderProgram.setUniform3fv("lightPosition", position, 0, position.length);
-        shaderProgram.setUniform3fv("lightDirection", direction, 0, direction.length);
+        shaderProgram.setUniform4fv("lightPosition", position, 0, position.length);
+        shaderProgram.setUniform4fv("lightDirection", direction, 0, direction.length);
         shaderProgram.setUniformf("spotCutOff", cutOff);
     }
+
+    public float[] getDirection() {
+        return direction;
+    }
+
+    public float getCutOff() {
+        return cutOff;
+    }
+    
+    
     
 }

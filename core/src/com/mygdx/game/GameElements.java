@@ -12,6 +12,7 @@ import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.light.MyDirectionalLight;
 import com.mygdx.light.MyLight;
 import com.mygdx.light.MyPointLight;
+import com.mygdx.light.MySpotLight;
 import com.mygdx.material.Material;
 
 import java.util.ArrayList;
@@ -30,12 +31,12 @@ public class GameElements {
     }
 
     public static List<MyLight> initLights() {
-        List<MyLight> lights = new ArrayList<>();
+        List<MyLight> lights = new ArrayList();
         /**
          * Point Light
          */
         MyPointLight pointLight = new MyPointLight();
-        pointLight.setPosition(new float[]{-1.5f, 3f, 0f});
+        pointLight.setPosition(new float[]{-1.5f, 3f, 0f, 1f}); //position
         pointLight.setAmbientLight(Color.WHITE);
         pointLight.setSpecularLight(Color.GREEN);
         pointLight.setLightColor(Color.BLUE);
@@ -45,7 +46,7 @@ public class GameElements {
          * Directional Light
          */
         MyDirectionalLight directionalLight = new MyDirectionalLight();
-        directionalLight.setPosition(new float[]{1.5f, -3f, 0f});
+        directionalLight.setPosition(new float[]{1.5f, -3f, 0f, 0f}); //direction
         directionalLight.setAmbientLight(Color.BLACK);
         directionalLight.setSpecularLight(Color.WHITE);
         directionalLight.setLightColor(Color.WHITE);
@@ -54,19 +55,20 @@ public class GameElements {
         /**
          * Spot Light
          */
-//        MySpotLight spotlightLight = new MySpotLight(new float[]{0f,1f,0f,0f}, 20f);
-//        float[] spotlightLightPosition = new float[]{0f, 3f, 0f};
-//        spotlightLight.setPosition(spotlightLightPosition);
-//        spotlightLight.setAmbientLight(new float[]{0.5f,0.5f,0.5f,1f});
-//        spotlightLight.setSpecularLight(new float[]{0f,1f,0f,1f});
-//        spotlightLight.setLightColor(new float[]{0f,0f,1f,1f});
-//        spotlightLight.setGlobalAmbientLight(new float[]{0f,0f,0f,1f});
-//        lights.add(spotlightLight);
+        MySpotLight spotlightLight = new MySpotLight(new float[]{0f,-1f,0f,0f}, 30f);
+        float[] spotlightLightPosition = new float[]{0f, 1f, 0f, 1f};
+        spotlightLight.setPosition(spotlightLightPosition);
+        spotlightLight.setAmbientLight(new float[]{1f,0f,0f,1f});
+        spotlightLight.setSpecularLight(new float[]{0f,0f,0f,1f});
+        spotlightLight.setLightColor(new float[]{0f,0f,0f,1f});
+        spotlightLight.setGlobalAmbientLight(new float[]{0f,0f,0f,1f});
+        lights.add(spotlightLight);
+        
         return lights;
     }
 
     public static List<DisplayableObject> initSpaceships() {
-        List<DisplayableObject> spaceships = new ArrayList<>();
+        List<DisplayableObject> spaceships = new ArrayList();
         Texture texture = new Texture("ship/ship.png");
         Material material = new Material();
         ModelLoader loader = new ObjLoader();

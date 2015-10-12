@@ -4,10 +4,12 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Matrix4;
 
 import com.mygdx.camera.MyCamera;
 import com.mygdx.light.MyDirectionalLight;
 import com.mygdx.light.MyLight;
+import com.mygdx.light.MySpotLight;
 
 import java.awt.Point;
 import java.util.List;
@@ -38,7 +40,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glDepthFunc(GL20.GL_LEQUAL);
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
 
         /**
          * Spaceships, quad, lights and camera.
@@ -62,6 +64,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
             shaderProgram.setUniform3fv("cameraPosition", camera.getPosition(), 0, 3);
             shaderProgram.setUniformMatrix("u_normalMatrix", camera.getNormalMatrix());
+            shaderProgram.setUniformMatrix("u_viewMatrix", camera.getVMatrix());
 
             /**
              * Movimiento de la Directional Light
@@ -92,6 +95,7 @@ public class MyGdxGame extends ApplicationAdapter {
              */
             for(DisplayableObject obj : objects) {
                 shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix().mul(obj.getTMatrix()));
+                shaderProgram.setUniformMatrix("u_modelViewMatrix", camera.getVMatrix().mul(obj.getTMatrix()));
                 obj.getMaterial().render(shaderProgram);
                 obj.getTexture().bind();
                 obj.getMesh().render(shaderProgram, GL20.GL_TRIANGLES);

@@ -3,12 +3,13 @@ varying vec3 normal; //normal eye space
 varying vec4 position; //position of point, eye space
 
 //light uniforms
-uniform vec3 lightPosition; //position of light, eye space
-uniform vec3 cameraPosition; //position of camera, eye space
+uniform vec4 lightPosition; //position of light, WORLD space
+uniform vec3 cameraPosition; //position of camera, WORLD space
 uniform vec4 lightSpecular;
 uniform vec4 lightAmbient;
 uniform vec4 lightColor;
 uniform vec4 globalAmbient;
+uniform mat4 u_viewMatrix;
 
 //material uniforms
 uniform vec4 matSpecular, matAmbient, matDiffuse;
@@ -17,14 +18,18 @@ uniform sampler2D u_texture;
 
 void main()
 {
-    vec3 L = lightPosition - position.xyz;
+
+    vec4 lightPositionEye = u_viewMatrix*lightPosition;
+    vec4 cameraPositionEye = u_viewMatrix*vec4(cameraPosition,1.);
+
+    vec3 L = lightPositionEye.xyz - position.xyz;
     L = normalize(L);
     
     // Compute the diffuse term
     float diffuseLight = max(dot(normal,L), 0.0);
     vec4 diffuse = matDiffuse * lightColor * diffuseLight;
 
-    vec3 V = normalize(cameraPosition - position.xyz);
+    vec3 V = normalize(cameraPositionEye.xyz - position.xyz);
     vec3 H = normalize(L + V);
 
     // Compute the specular term

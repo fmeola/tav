@@ -3,14 +3,15 @@ varying vec3 normal; //normal eye space
 varying vec4 position; //position of point, eye space
 
 //light uniforms
-uniform vec3 lightPosition; //position of light, eye space
-uniform vec3 lightDirection; //direction of light, eye space
-uniform vec3 cameraPosition; //position of camera, eye space
+uniform vec4 lightPosition; //position of light, world space
+uniform vec4 lightDirection; //direction of light, world space
+uniform vec3 cameraPosition; //position of camera, world space
 uniform float spotCutOff; //in degrees
 uniform vec4 lightSpecular;
 uniform vec4 lightAmbient;
 uniform vec4 lightColor;
 uniform vec4 globalAmbient;
+uniform mat4 u_viewMatrix;
 
 //material uniforms
 uniform vec4 matSpecular, matAmbient, matDiffuse;
@@ -19,18 +20,24 @@ uniform sampler2D u_texture;
 
 void main()
 {
-    vec3 L = lightPosition - position.xyz;
-    L = normalize(L);
+    vec4 lightPositionEye = u_viewMatrix*lightPosition;
+    vec4 lightDirectionEye = u_viewMatrix*lightDirection;
+    vec4 cameraPositionEye = u_viewMatrix*vec4(cameraPosition,1.);
 
-    float angle = acos( dot(lightDirection,L) );
+    vec3 L = (lightPositionEye - position).xyz;
+    L = normalize(L);
+    float dotProduct = dot(-L,lightDirectionEye.xyz);
+    dotProduct = dotProduct / ( length(-lightDirectionEye.xyz) * length(-L) );
+    float angle = acos( dotProduct );
     angle = max(angle, 0.0);
     if (angle < radians(spotCutOff)) {
         //lighted
+
         // Compute the diffuse term
         float diffuseLight = max(dot(normal,L), 0.0);
         vec4 diffuse = matDiffuse * lightColor * diffuseLight;
 
-        vec3 V = normalize(cameraPosition - position.xyz);
+        vec3 V = normalize(cameraPositionEye.xyz - position.xyz);
         vec3 H = normalize(L + V);
 
         // Compute the specular term

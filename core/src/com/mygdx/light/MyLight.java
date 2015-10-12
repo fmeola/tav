@@ -38,9 +38,9 @@ public abstract class MyLight {
     }
 
     public void setPosition(float[] position) {
-        if(position.length != 3) {
+        /*if(position.length != 3) {
             throw new IllegalArgumentException();
-        }
+        }*/
         this.position = position;
     }
 

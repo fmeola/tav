@@ -11,7 +11,7 @@ public class MyPointLight extends MyLight {
 
     public void render() {
         super.render();
-        shaderProgram.setUniform3fv("lightPosition", position, 0, position.length);
+        shaderProgram.setUniform4fv("lightPosition", position, 0, position.length);
     }
     
 }
