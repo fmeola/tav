@@ -26,30 +26,34 @@ void main()
 
     vec3 L = (lightPositionEye - position).xyz;
     L = normalize(L);
-    float dotProduct = dot(-L,lightDirectionEye.xyz);
-    dotProduct = dotProduct / ( length(-lightDirectionEye.xyz) * length(-L) );
-    float angle = acos( dotProduct );
-    angle = max(angle, 0.0);
-    if (angle < radians(spotCutOff)) {
-        //lighted
+    float NdotL = dot(L,normal);
+    if (NdotL > 0.0) {
+        float dotProduct = dot(-L,lightDirectionEye.xyz);
+        dotProduct = dotProduct / ( length(-lightDirectionEye.xyz) * length(-L) );
+        float angle = acos( dotProduct );
+        angle = max(angle, 0.0);
+        if (angle < radians(spotCutOff)) {
+            //lighted
 
-        // Compute the diffuse term
-        float diffuseLight = max(dot(normal,L), 0.0);
-        vec4 diffuse = matDiffuse * lightColor * diffuseLight;
+            // Compute the diffuse term
+            float diffuseLight = max(dot(normal,L), 0.0);
+            vec4 diffuse = matDiffuse * lightColor * diffuseLight;
 
-        vec3 V = normalize(cameraPositionEye.xyz - position.xyz);
-        vec3 H = normalize(L + V);
+            vec3 V = normalize(cameraPositionEye.xyz - position.xyz);
+            vec3 H = normalize(L + V);
 
-        // Compute the specular term
-        float specularHardness = pow(max(0.0,dot(H,normal)), matShininess);
-        vec4 specular = matSpecular * lightSpecular * specularHardness;
-        
-        // Compute ambient term
-        vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
-    
-        gl_FragColor = texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
-    } else {
-        gl_FragColor = vec4(0.,0.,0.,1.);
+            // Compute the specular term
+            float specularHardness = pow(max(0.0,dot(H,normal)), matShininess);
+            vec4 specular = matSpecular * lightSpecular * specularHardness;
+
+            // Compute ambient term
+            vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
+
+            gl_FragColor = texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
+        } else {
+            gl_FragColor = vec4(0.,0.,0.,1.);
+        }
     }
+    else gl_FragColor = vec4(0.,0.,0.,1.);
 
 }

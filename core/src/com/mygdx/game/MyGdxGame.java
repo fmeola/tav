@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.mygdx.camera.MyCamera;
 import com.mygdx.light.MyDirectionalLight;
 import com.mygdx.light.MyLight;
+import com.mygdx.light.MySpotLight;
 
 import java.awt.Point;
 import java.util.List;
@@ -20,9 +21,12 @@ public class MyGdxGame extends ApplicationAdapter {
     private List<DisplayableObject> objects;
     private List<MyLight> lights;
 
-    private static final int LIGHT_MOVE_LIMIT = 300;
-    private int count = -LIGHT_MOVE_LIMIT;
-    private boolean rightDir = true;
+    private static final float diff = 0.05f;
+    private static final int LIGHT_MOVE_LIMIT = (int)(2/diff);
+    private int countDirectional = -LIGHT_MOVE_LIMIT/2;
+    private int countSpotlight = -LIGHT_MOVE_LIMIT/2;
+    private boolean rightDirDirectional = true;
+    private boolean rightDirSpotlight = true;
     private boolean firstTime = true;
 
     @Override
@@ -38,7 +42,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
         Gdx.gl.glDepthFunc(GL20.GL_LEQUAL);
         Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
 
         /**
          * Spaceships, quad, lights and camera.
@@ -70,18 +74,38 @@ public class MyGdxGame extends ApplicationAdapter {
              * Movimiento de la Directional Light
              */
             if(light instanceof MyDirectionalLight) {
-                float diff = 0.05f;
                 float lightPosition[] = light.getPosition();
-                if (rightDir) {
-                    count++;
+                if (rightDirDirectional) {
+                    ++countDirectional;
                     lightPosition[0] += diff;
                 } else {
-                    count--;
+                    --countDirectional;
                     lightPosition[0] -= diff;
                 }
-                if (count == LIGHT_MOVE_LIMIT || count == -LIGHT_MOVE_LIMIT) {
-                    rightDir = !rightDir;
+                if (countDirectional == LIGHT_MOVE_LIMIT || countDirectional == -LIGHT_MOVE_LIMIT) {
+                    rightDirDirectional = !rightDirDirectional;
                 }
+                light.setPosition(new float[]{lightPosition[0], lightPosition[1], lightPosition[2]});
+            }
+            
+            /**
+             * Movimiento de la SpotLight.
+             */
+            /*else if (light instanceof MySpotLight) {
+                //System.out.println(light.getPosition()[0]);
+                float lightPosition[] = light.getPosition();
+                if (rightDirSpotlight) {
+                    ++countSpotlight;
+                    lightPosition[0] += diff;
+                } else {
+                    --countSpotlight;
+                    lightPosition[0] -= diff;
+                }
+                System.out.println(countSpotlight);
+                if (countSpotlight == LIGHT_MOVE_LIMIT || countSpotlight == -LIGHT_MOVE_LIMIT) {
+                    rightDirSpotlight = !rightDirSpotlight;
+                }
+                //System.out.println(lightPosition[0]);
                 light.setPosition(new float[]{lightPosition[0], lightPosition[1], lightPosition[2]});
             }
 

@@ -36,33 +36,33 @@ public class GameElements {
          * Directional Light
          */
         MyDirectionalLight directionalLight = new MyDirectionalLight();
-        directionalLight.setPosition(new float[]{1.5f, -2f, 0f, 1f}); //direction
+        directionalLight.setPosition(new float[]{-1f, 1f, 0f, 0f}); //direction
         directionalLight.setAmbientLight(Color.BLACK);
-        directionalLight.setSpecularLight(Color.YELLOW);
-        directionalLight.setLightColor(Color.YELLOW);
+        directionalLight.setSpecularLight(Color.BLACK);
+        directionalLight.setLightColor(Color.WHITE);
         directionalLight.setGlobalAmbientLight(Color.BLACK);
         lights.add(directionalLight);
         /**
          * Spot Light
          */
         MySpotLight spotlightLight = new MySpotLight(new float[]{0f,-1f,0f,0f}, 30f);
-        float[] spotlightLightPosition = new float[]{0f, 1f, 0f, 1f};
+        float[] spotlightLightPosition = new float[]{-1f, 1f, 0f, 1f};
         spotlightLight.setPosition(spotlightLightPosition);
-        spotlightLight.setAmbientLight(Color.RED);
+        spotlightLight.setAmbientLight(Color.BLACK);
         spotlightLight.setSpecularLight(Color.BLACK);
-        spotlightLight.setLightColor(Color.BLACK);
+        spotlightLight.setLightColor(Color.BLUE);
         spotlightLight.setGlobalAmbientLight(Color.BLACK);
         lights.add(spotlightLight);
         /**
          * Point Light
          */
-        MyPointLight pointLight = new MyPointLight();
+        /*MyPointLight pointLight = new MyPointLight();
         pointLight.setPosition(new float[]{-1.5f, 3f, 0f, 1f}); //position
         pointLight.setAmbientLight(Color.WHITE);
         pointLight.setSpecularLight(Color.GREEN);
         pointLight.setLightColor(Color.BLUE);
         pointLight.setGlobalAmbientLight(Color.BLACK);
-        lights.add(pointLight);
+        lights.add(pointLight);*/
         return lights;
     }
 
