@@ -20,6 +20,13 @@ import java.util.List;
 
 public class GameElements {
 
+    private static final float diff = 0.05f;
+    private static final int LIGHT_MOVE_LIMIT = (int)(2/diff);
+    private static int countDirectional = -LIGHT_MOVE_LIMIT/2;
+    private static int countSpotlight = -LIGHT_MOVE_LIMIT/2;
+    private static boolean rightDirDirectional = true;
+    private static boolean rightDirSpotlight = true;
+
     public static MyCamera initCamera() {
 //        MyCamera camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
@@ -56,13 +63,13 @@ public class GameElements {
         /**
          * Point Light
          */
-        /*MyPointLight pointLight = new MyPointLight();
-        pointLight.setPosition(new float[]{-1.5f, 3f, 0f, 1f}); //position
-        pointLight.setAmbientLight(Color.WHITE);
-        pointLight.setSpecularLight(Color.GREEN);
-        pointLight.setLightColor(Color.BLUE);
-        pointLight.setGlobalAmbientLight(Color.BLACK);
-        lights.add(pointLight);*/
+//        MyPointLight pointLight = new MyPointLight();
+//        pointLight.setPosition(new float[]{-1.5f, 3f, 0f, 1f}); //position
+//        pointLight.setAmbientLight(Color.BLACK);
+//        pointLight.setSpecularLight(Color.BLACK);
+//        pointLight.setLightColor(Color.GREEN);
+//        pointLight.setGlobalAmbientLight(Color.BLACK);
+//        lights.add(pointLight);
         return lights;
     }
 
@@ -100,6 +107,45 @@ public class GameElements {
         material.setDiffuse(new float[]{0.5f,0f,0.2f,1f});
         material.setShininess(0.5f);
         return new DisplayableObject(mesh, new Vector3(0,0,0), texture, material);
+    }
+
+    public static void moveLight(MyLight light) {
+        /**
+         * Movimiento de la Directional Light
+         */
+        if(light instanceof MyDirectionalLight) {
+            float lightPosition[] = light.getPosition();
+            if (rightDirDirectional) {
+                ++countDirectional;
+                lightPosition[0] += diff;
+            } else {
+                --countDirectional;
+                lightPosition[0] -= diff;
+            }
+            if (countDirectional == LIGHT_MOVE_LIMIT || countDirectional == -LIGHT_MOVE_LIMIT) {
+                rightDirDirectional = !rightDirDirectional;
+            }
+            light.setPosition(new float[]{lightPosition[0], lightPosition[1], lightPosition[2]});
+            return ;
+        }
+        /**
+         * Movimiento de la SpotLight.
+         */
+//            if (light instanceof MySpotLight) {
+//                float lightPosition[] = light.getPosition();
+//                if (rightDirSpotlight) {
+//                    ++countSpotlight;
+//                    lightPosition[0] += diff;
+//                } else {
+//                    --countSpotlight;
+//                    lightPosition[0] -= diff;
+//                }
+//                if (countSpotlight == LIGHT_MOVE_LIMIT || countSpotlight == -LIGHT_MOVE_LIMIT) {
+//                    rightDirSpotlight = !rightDirSpotlight;
+//                }
+//                light.setPosition(new float[]{lightPosition[0], lightPosition[1], lightPosition[2]});
+//                return;
+//            }
     }
 
 }
