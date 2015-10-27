@@ -14,9 +14,9 @@ public abstract class MyCamera {
 
     public Vector3 position = new Vector3(0f,0f,0f);
 
-    protected Vector3 target;
+    //protected Vector3 target;
 
-    protected Vector3 up = new Vector3(0f, 1f, 0f);
+    //protected Vector3 up = new Vector3(0f, 1f, 0f);
 
     public float rotX = 0;
     public float rotY = 0;
@@ -26,9 +26,9 @@ public abstract class MyCamera {
         this.height = height;
     }
 
-    public void lookAt(float x, float y, float z) {
+    /*public void lookAt(float x, float y, float z) {
         this.target = new Vector3(x,y,z);
-    }
+    }*/
 
     public Matrix4 getVMatrix() {
         return Translation.getTranslationMatrix(position.x, position.y, position.z).

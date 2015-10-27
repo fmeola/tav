@@ -31,7 +31,7 @@ public class GameElements {
 //        MyCamera camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera.position.set(0f, 0f, 2f);
-        camera.lookAt(0, 0, 0);
+        //camera.lookAt(0, 0, 0);
         camera.near = 0.1f;
         camera.far = 300f;
         return camera;
@@ -52,7 +52,7 @@ public class GameElements {
         /**
          * Spot Light
          */
-        MySpotLight spotlightLight = new MySpotLight(new float[]{0f,-1f,0f,0f}, 30f);
+        /*MySpotLight spotlightLight = new MySpotLight(new float[]{0f,-1f,0f,0f}, 30f);
         float[] spotlightLightPosition = new float[]{-1f, 1f, 0f, 1f};
         spotlightLight.setPosition(spotlightLightPosition);
         spotlightLight.setAmbientLight(Color.BLACK);
@@ -131,21 +131,21 @@ public class GameElements {
         /**
          * Movimiento de la SpotLight.
          */
-//            if (light instanceof MySpotLight) {
-//                float lightPosition[] = light.getPosition();
-//                if (rightDirSpotlight) {
-//                    ++countSpotlight;
-//                    lightPosition[0] += diff;
-//                } else {
-//                    --countSpotlight;
-//                    lightPosition[0] -= diff;
-//                }
-//                if (countSpotlight == LIGHT_MOVE_LIMIT || countSpotlight == -LIGHT_MOVE_LIMIT) {
-//                    rightDirSpotlight = !rightDirSpotlight;
-//                }
-//                light.setPosition(new float[]{lightPosition[0], lightPosition[1], lightPosition[2]});
-//                return;
+//        else if (light instanceof MySpotLight) {
+//            float lightPosition[] = light.getPosition();
+//            if (rightDirSpotlight) {
+//                ++countSpotlight;
+//                lightPosition[0] += diff;
+//            } else {
+//                --countSpotlight;
+//                lightPosition[0] -= diff;
 //            }
+//            if (countSpotlight == LIGHT_MOVE_LIMIT || countSpotlight == -LIGHT_MOVE_LIMIT) {
+//                rightDirSpotlight = !rightDirSpotlight;
+//            }
+//            light.setPosition(new float[]{lightPosition[0], lightPosition[1], lightPosition[2]});
+//            return;
+//        }
     }
 
 }

@@ -1,5 +1,7 @@
 package com.mygdx.light;
 
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+
 /**
  * http://www.3dgep.com/transformation-and-lighting-in-cg/#Spotlight_Effects
  */
@@ -10,9 +12,11 @@ public class MySpotLight extends MyLight {
 
     private static final String vsPath = "blinn-phong-vert.glsl";
     private static final String fsPath = "spot/spot-blinn-phong-frag.glsl";
+    private static final String shadowFsPath = "shadow-light/shadow-spot-frag.glsl";
+    private static final String vsShadowPath = "shadow-light/shadow-vert.glsl";
 
     public MySpotLight(float[] direction, float cutOff) {
-        super(vsPath, fsPath);
+        super(vsPath, fsPath, shadowFsPath, vsShadowPath);
         this.direction = direction;
         this.cutOff = cutOff;
     }

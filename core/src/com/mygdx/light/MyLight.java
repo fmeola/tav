@@ -3,10 +3,11 @@ package com.mygdx.light;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.mygdx.camera.MyCamera;
 
 public abstract class MyLight {
-
-    protected ShaderProgram shaderProgram;
+    
+    protected ShaderProgram shaderProgram, shadowShaderProgram;
 
     protected float[] position; //en DirectionalLight: vector direccion
     
@@ -15,12 +16,19 @@ public abstract class MyLight {
     protected float[] specularLight = new float[]{0.2f,0.5f,0.2f,1f};
     protected float[] lightColor = new float[]{1f,1f,1f,1f};
     protected float[] globalAmbientLight = new float[]{0.7f,0.7f,0.7f,1f};
+    
+    protected MyCamera camera; //para shadow map
 
-    public MyLight(String vsPath, String fsPath) {
+    public MyLight(String vsPath, String fsPath, String shadowFsPath, String shadowVsPath) {
         String vs = Gdx.files.internal(vsPath).readString();
         String fs = Gdx.files.internal(fsPath).readString();
         this.shaderProgram = new ShaderProgram(vs, fs);
         System.out.print(shaderProgram.getLog());
+
+        fs = Gdx.files.internal(shadowFsPath).readString();
+        vs = Gdx.files.internal(shadowVsPath).readString();
+        this.shadowShaderProgram = new ShaderProgram(vs, fs);
+        System.out.print(shadowShaderProgram.getLog());
     }
 
     public void render() {
@@ -36,6 +44,8 @@ public abstract class MyLight {
     public MyLight(float[] position) {
         this.position = position;
     }
+    
+    public void initCamera() {}
 
     public void setPosition(float[] position) {
         /*if(position.length != 3) {
@@ -46,6 +56,10 @@ public abstract class MyLight {
 
     public ShaderProgram getShaderProgram() {
         return shaderProgram;
+    }
+    
+    public ShaderProgram getShadowShaderProgram() {
+        return shadowShaderProgram;
     }
 
     public void setLightColor(float[] lightColor) {
@@ -104,5 +118,9 @@ public abstract class MyLight {
 
     public float[] getPosition() {
         return position;
+    }
+    
+    public MyCamera getCamera() {
+        return camera;
     }
 }

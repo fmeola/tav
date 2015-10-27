@@ -56,6 +56,32 @@ public class MyGdxGame extends ApplicationAdapter {
                 Gdx.gl.glEnable(GL20.GL_BLEND);
                 Gdx.gl.glBlendFunc(GL20.GL_ONE,GL20.GL_ONE);
             }
+            
+            /*
+             * Generar Shadow Map
+            */
+            
+            light.initCamera();
+            MyCamera lightCamera = light.getCamera();
+            ShaderProgram shadowShaderProgram = light.getShadowShaderProgram();
+            
+            shadowShaderProgram.begin();
+
+            
+            for(DisplayableObject obj : objects) {
+                shadowShaderProgram.setUniformMatrix("u_worldView", lightCamera.getPVMatrix().mul(obj.getTMatrix()));
+                shadowShaderProgram.setUniformMatrix("u_modelViewMatrix", lightCamera.getVMatrix().mul(obj.getTMatrix()));
+                //obj.getMaterial().render(shadowShaderProgram);
+                obj.getTexture().bind();
+                obj.getMesh().render(shadowShaderProgram, GL20.GL_TRIANGLES);
+            }
+
+            shadowShaderProgram.end();
+            
+            /*
+             * Pintar
+            */
+
             ShaderProgram shaderProgram = light.getShaderProgram();
             shaderProgram.begin();
 
@@ -79,6 +105,7 @@ public class MyGdxGame extends ApplicationAdapter {
             for(DisplayableObject obj : objects) {
                 shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix().mul(obj.getTMatrix()));
                 shaderProgram.setUniformMatrix("u_modelViewMatrix", camera.getVMatrix().mul(obj.getTMatrix()));
+                shaderProgram.setUniformMatrix("u_modelViewMatrixLight", lightCamera.getVMatrix().mul(obj.getTMatrix()));
                 obj.getMaterial().render(shaderProgram);
                 obj.getTexture().bind();
                 obj.getMesh().render(shaderProgram, GL20.GL_TRIANGLES);
