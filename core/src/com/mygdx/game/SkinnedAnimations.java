@@ -18,7 +18,9 @@ import com.mygdx.camera.MyCamera;
 
 /**
  * Inspiración:
- * 1) http://dagger.se/?p=71
+ * 1) http://cgi.tutsplus.com/tutorials/create-an-animation-walk-cycle-in-blender-using-rigify--cg-17812
+ * 2) https://github.com/libgdx/fbx-conv
+ * 3) http://dagger.se/?p=71
  */
 public class SkinnedAnimations implements ApplicationListener {
 
@@ -28,8 +30,9 @@ public class SkinnedAnimations implements ApplicationListener {
     private ModelInstance characterInstance;
     private AnimationController animationController;
 
-    private static final String vsPath = "animation/animation-vs.glsl";
-    private static final String fsPath = "animation/animation-fs.glsl";
+    private static final String VS_PATH = "animation/animation-vs.glsl";
+    private static final String FS_PATH = "animation/animation-fs.glsl";
+    private static final String ANIMATION_FILE_PATH = "animation/CGTuts-rigify-walk.g3db";
     private static final float DELTA_TIME = 60;
     private static final int BONE_MATRIX_COUNT = 12;
     private static final int MATRIX_SIZE = 16;
@@ -39,25 +42,27 @@ public class SkinnedAnimations implements ApplicationListener {
         /**
          * Creación del Shader.
          */
-        String vs = Gdx.files.internal(vsPath).readString();
-        String fs = Gdx.files.internal(fsPath).readString();
+        String vs = Gdx.files.internal(VS_PATH).readString();
+        String fs = Gdx.files.internal(FS_PATH).readString();
         shaderProgram = new ShaderProgram(vs, fs);
+        System.out.println(shaderProgram.getLog());
 
         /**
          * Creación de la cámara.
          */
         camera = GameElements.initCamera();
 
-        assets.load("animation/complete_rig_finish.g3db", Model.class);
+        assets.load(ANIMATION_FILE_PATH, Model.class);
 
         /**
          * Creación del Modelo.
          */
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-        Model characterModel = modelLoader.loadModel(Gdx.files.getFileHandle("animation/complete_rig_finish.g3db", Files.FileType.Internal));
+        Model characterModel = modelLoader.loadModel(Gdx.files.getFileHandle(ANIMATION_FILE_PATH, Files.FileType.Internal));
         characterInstance = new ModelInstance(characterModel);
-        System.out.println("#Animaciones: " + characterInstance.animations.size);
+        System.out.println("#Animations: " + characterInstance.animations.size);
+        System.out.println("#NodeAnimations: " + characterModel.animations.get(0).nodeAnimations.size);
 
         /**
          * Creación de la animación.
@@ -86,25 +91,27 @@ public class SkinnedAnimations implements ApplicationListener {
             }
         };
         characterInstance.getRenderables(renderables, pool);
+//        System.out.println("#Renderables: " + renderables.size);
         Matrix4 idtMatrix = new Matrix4().idt();
-        float[] bones = new float[BONE_MATRIX_COUNT*MATRIX_SIZE];
+        float[] bones = new float[BONE_MATRIX_COUNT * MATRIX_SIZE];
         for (int i = 0; i < bones.length; i++) {
             bones[i] = idtMatrix.val[i % MATRIX_SIZE];
         }
 
         Matrix4 mvpMatrix = new Matrix4();
-        Matrix4 nMatrix = new Matrix4();
+//        Matrix4 nMatrix = new Matrix4();
 
         for (Renderable render : renderables) {
             mvpMatrix.set(camera.getPVMatrix());
             mvpMatrix.mul(render.worldTransform);
+//            System.out.println(mvpMatrix);
             shaderProgram.setUniformMatrix("u_mvpMatrix", mvpMatrix);
-            nMatrix.set(camera.getVMatrix());
-            nMatrix.mul(render.worldTransform);
-            shaderProgram.setUniformMatrix("u_modelViewMatrix", nMatrix);
-            nMatrix.inv();
-            nMatrix.tra();
-            shaderProgram.setUniformMatrix("u_normalMatrix", nMatrix);
+//            nMatrix.set(camera.getVMatrix());
+//            nMatrix.mul(render.worldTransform);
+//            shaderProgram.setUniformMatrix("u_modelViewMatrix", nMatrix);
+//            nMatrix.inv();
+//            nMatrix.tra();
+//            shaderProgram.setUniformMatrix("u_normalMatrix", nMatrix);
             for (int i = 0; i < bones.length; i++) {
                 final int idx = i/MATRIX_SIZE;
                 bones[i] = (render.bones == null || idx >= render.bones.length || render.bones[idx] == null) ?
