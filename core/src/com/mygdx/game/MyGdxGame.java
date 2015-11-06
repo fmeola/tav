@@ -26,7 +26,7 @@ public class MyGdxGame extends ApplicationAdapter {
         /**
          * Keyboard & Mouse
          */
-        Gdx.input.setInputProcessor(new GameInputProcessor());
+//        Gdx.input.setInputProcessor(new GameInputProcessor(camera, mousePosition));
 
         /**
          * OpenGL.
@@ -42,6 +42,8 @@ public class MyGdxGame extends ApplicationAdapter {
         objects.add(GameElements.initQuad());
         lights = GameElements.initLights();
         camera = GameElements.initCamera();
+
+        Gdx.input.setInputProcessor(new GameInputProcessor(camera, mousePosition));
     }
 
     @Override
