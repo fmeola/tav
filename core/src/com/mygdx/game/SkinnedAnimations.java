@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.UBJsonReader;
@@ -40,6 +39,7 @@ public class SkinnedAnimations implements ApplicationListener {
     private static final String ANIMATION_FILE_PATH = "animation/Dave.g3db";
     private static final int BONE_MATRIX_COUNT = 32;
     private static final int MATRIX_SIZE = 16;
+    private static final String TEXTURE_PATH = "animation/uv_dave_mapeo.jpg";
 
     Texture texture;
     public static Point mousePosition = new Point(0,0);
@@ -55,30 +55,32 @@ public class SkinnedAnimations implements ApplicationListener {
         System.out.println(shaderProgram.getLog());
 
         /**
-         * Creación de la cámara.
+         * OpenGL
          */
-        camera = GameElements.initAnimationCamera();
-        camera.setPosition(new Vector3(0f, 5f, 25f));
-        assets.load(ANIMATION_FILE_PATH, Model.class);
-
-        texture = new Texture("animation/uv_dave_mapeo.jpg");
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
+        Gdx.gl.glDepthFunc(GL20.GL_LEQUAL);
 
         /**
-         * Creación del Modelo.
+         * Creación del Modelo y la Animación
          */
+        assets.load(ANIMATION_FILE_PATH, Model.class);
+        texture = new Texture(TEXTURE_PATH);
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         Model characterModel = modelLoader.loadModel(Gdx.files.getFileHandle(ANIMATION_FILE_PATH, Files.FileType.Internal));
         characterInstance = new ModelInstance(characterModel);
-
-        /**
-         * Creación de la animación.
-         */
         animationController = new AnimationController(characterInstance);
         animationController.animate(characterInstance.animations.get(0).id, -1, 1f, null, 0.2f); // Starts the animaton
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        /**
+         * Creación de la cámara.
+         */
+        camera = GameElements.initAnimationCamera();
 
+        /**
+         * Keyboard & Mouse
+         */
         Gdx.input.setInputProcessor(new GameInputProcessor(camera, mousePosition));
     }
 
@@ -105,7 +107,6 @@ public class SkinnedAnimations implements ApplicationListener {
             }
         };
         characterInstance.getRenderables(renderables, pool);
-//        System.out.println("#Renderables: " + renderables.size);
         Matrix4 idtMatrix = new Matrix4().idt();
         float[] bones = new float[BONE_MATRIX_COUNT * MATRIX_SIZE];
         for (int i = 0; i < bones.length; i++) {
@@ -119,12 +120,6 @@ public class SkinnedAnimations implements ApplicationListener {
             mvpMatrix.set(camera.getPVMatrix());
             mvpMatrix.mul(render.worldTransform);
             shaderProgram.setUniformMatrix("u_mvpMatrix", mvpMatrix);
-//            nMatrix.set(camera.getVMatrix());
-//            nMatrix.mul(render.worldTransform);
-//            shaderProgram.setUniformMatrix("u_modelViewMatrix", nMatrix);
-//            nMatrix.inv();
-//            nMatrix.tra();
-//            shaderProgram.setUniformMatrix("u_normalMatrix", nMatrix);
             for (int i = 0; i < bones.length; i++) {
                 final int idx = i/MATRIX_SIZE;
                 bones[i] = (render.bones == null || idx >= render.bones.length || render.bones[idx] == null) ?

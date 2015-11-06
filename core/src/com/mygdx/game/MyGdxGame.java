@@ -24,11 +24,6 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void create () {
         /**
-         * Keyboard & Mouse
-         */
-//        Gdx.input.setInputProcessor(new GameInputProcessor(camera, mousePosition));
-
-        /**
          * OpenGL.
          */
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
@@ -43,6 +38,9 @@ public class MyGdxGame extends ApplicationAdapter {
         lights = GameElements.initLights();
         camera = GameElements.initCamera();
 
+        /**
+         * Keyboard & Mouse
+         */
         Gdx.input.setInputProcessor(new GameInputProcessor(camera, mousePosition));
     }
 

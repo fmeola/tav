@@ -41,7 +41,7 @@ public class GameElements {
     public static MyCamera initAnimationCamera() {
         MyCamera camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //        MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
-        camera.position.set(0f, 0f, 2f);
+        camera.position.set(0f, 5f, 25f);
 //        camera.lookAt(0, 0, 0);
         camera.near = 0.1f;
         camera.far = 300f;
