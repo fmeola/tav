@@ -45,7 +45,7 @@ public abstract class MyLight {
         this.position = position;
     }
     
-    public void initCamera() {}
+    public abstract MyCamera initCamera();
 
     public void setPosition(float[] position) {
         /*if(position.length != 3) {

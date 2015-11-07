@@ -1,6 +1,5 @@
 varying vec4 position; //position of point, eye space
 
-
 void main()
 {
     //encode z in eye space
@@ -9,5 +8,6 @@ void main()
     enc -= enc.yzww * vec4(1.0/255.0,1.0/255.0,1.0/255.0,0.0);
 
     gl_FragColor = enc;
+//    gl_FragColor = vec4(1,0,0,1);
 }
 

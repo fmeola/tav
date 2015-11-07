@@ -1,6 +1,7 @@
 package com.mygdx.light;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 
 public class MyDirectionalLight extends MyLight {
@@ -20,12 +21,12 @@ public class MyDirectionalLight extends MyLight {
         shaderProgram.setUniform4fv("direction", position, 0, 4);
     }
     
-    @Override
-    public void initCamera() {
+    public MyCamera initCamera() {
         camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera.position.set(this.position[0]*10f, this.position[1]*10f, this.position[2]*10f);
         camera.near = 0.1f;
         camera.far = 300f;
+        return camera;
     }
 
 }

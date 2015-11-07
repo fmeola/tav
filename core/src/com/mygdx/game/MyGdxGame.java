@@ -3,6 +3,9 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import com.mygdx.camera.MyCamera;
@@ -20,6 +23,20 @@ public class MyGdxGame extends ApplicationAdapter {
     private List<MyLight> lights;
 
     private boolean firstTime;
+
+    private Mesh shadowTest;
+
+    //The maximum number of triangles our mesh will hold
+    public static final int MAX_TRIS = 1;
+
+    //The maximum number of vertices our mesh will hold
+    public static final int MAX_VERTS = MAX_TRIS * 3;
+
+    //Position attribute - (x, y)
+    public static final int POSITION_COMPONENTS = 2;
+
+    //Color attribute - (r, g, b, a)
+    public static final int COLOR_COMPONENTS = 4;
 
     @Override
     public void create () {
@@ -52,39 +69,36 @@ public class MyGdxGame extends ApplicationAdapter {
          * Blending para varios shaders.
          */
         for(MyLight light: lights){
+            /*
+             * Generar Shadow Map
+             */
+            MyCamera lightCamera = light.initCamera();
+            ShaderProgram shadowShaderProgram = light.getShadowShaderProgram();
+
+            shadowShaderProgram.begin();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+            Gdx.gl.glClearColor(0,0,0,0);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+            for(DisplayableObject obj : objects) {
+                shadowShaderProgram.setUniformMatrix("u_worldView", lightCamera.getPVMatrix().mul(obj.getTMatrix()));
+//                shadowShaderProgram.setUniformMatrix("u_modelViewMatrix", lightCamera.getVMatrix().mul(obj.getTMatrix()));
+//                obj.getMaterial().render(shadowShaderProgram);
+                obj.getTexture().bind();
+                obj.getMesh().render(shadowShaderProgram, GL20.GL_TRIANGLES);
+            }
+            shadowShaderProgram.end();
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+
             if(!firstTime){
                 Gdx.gl.glEnable(GL20.GL_BLEND);
                 Gdx.gl.glBlendFunc(GL20.GL_ONE,GL20.GL_ONE);
             }
-            
-            /*
-             * Generar Shadow Map
-            */
-            
-            light.initCamera();
-            MyCamera lightCamera = light.getCamera();
-            ShaderProgram shadowShaderProgram = light.getShadowShaderProgram();
-            
-            shadowShaderProgram.begin();
 
-            
-            for(DisplayableObject obj : objects) {
-                shadowShaderProgram.setUniformMatrix("u_worldView", lightCamera.getPVMatrix().mul(obj.getTMatrix()));
-                shadowShaderProgram.setUniformMatrix("u_modelViewMatrix", lightCamera.getVMatrix().mul(obj.getTMatrix()));
-                //obj.getMaterial().render(shadowShaderProgram);
-                obj.getTexture().bind();
-                obj.getMesh().render(shadowShaderProgram, GL20.GL_TRIANGLES);
-            }
-
-            shadowShaderProgram.end();
-            
             /*
              * Pintar
             */
-
             ShaderProgram shaderProgram = light.getShaderProgram();
             shaderProgram.begin();
-
             shaderProgram.setUniform3fv("cameraPosition", camera.getPosition(), 0, 3);
             shaderProgram.setUniformMatrix("u_normalMatrix", camera.getNormalMatrix());
             shaderProgram.setUniformMatrix("u_viewMatrix", camera.getVMatrix());
