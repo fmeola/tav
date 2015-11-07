@@ -24,19 +24,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private boolean firstTime;
 
-    private Mesh shadowTest;
-
     //The maximum number of triangles our mesh will hold
     public static final int MAX_TRIS = 1;
-
-    //The maximum number of vertices our mesh will hold
-    public static final int MAX_VERTS = MAX_TRIS * 3;
-
-    //Position attribute - (x, y)
-    public static final int POSITION_COMPONENTS = 2;
-
-    //Color attribute - (r, g, b, a)
-    public static final int COLOR_COMPONENTS = 4;
 
     @Override
     public void create () {
