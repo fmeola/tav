@@ -64,17 +64,17 @@ public class GameInputProcessor implements InputProcessor {
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         float value;
-        if (screenX != MyGdxGame.mousePosition.x) {
-            value = screenX > MyGdxGame.mousePosition.x ? -0.01f : 0.01f;
-            MyGdxGame.camera.rotY += value;
+        if (screenX != mousePosition.x) {
+            value = screenX > mousePosition.x ? -0.01f : 0.01f;
+            camera.rotY += value;
             //MyGdxGame.shadowCamera.rotY += value;
-            MyGdxGame.mousePosition.x = screenX;
+            mousePosition.x = screenX;
         }
-        if (screenY != MyGdxGame.mousePosition.y) {
-            value = screenY > MyGdxGame.mousePosition.y ? -0.01f : 0.01f;
-            MyGdxGame.camera.rotX += value;
+        if (screenY != mousePosition.y) {
+            value = screenY > mousePosition.y ? -0.01f : 0.01f;
+            camera.rotX += value;
 //            MyGdxGame.shadowCamera.rotX += value;
-            MyGdxGame.mousePosition.y = screenY;
+            mousePosition.y = screenY;
         }
         return true;
     }

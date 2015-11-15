@@ -1,6 +1,5 @@
 package com.mygdx.camera;
 
-import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 
 public class Rotation {

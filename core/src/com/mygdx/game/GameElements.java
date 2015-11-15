@@ -63,23 +63,23 @@ public class GameElements {
         /**
          * Spot Light
          */
-        /*MySpotLight spotlightLight = new MySpotLight(new float[]{0f,-1f,0f,0f}, 30f);
+        MySpotLight spotlightLight = new MySpotLight(new float[]{0f,-1f,0f,0f}, 30f);
         float[] spotlightLightPosition = new float[]{-1f, 1f, 0f, 1f};
         spotlightLight.setPosition(spotlightLightPosition);
         spotlightLight.setAmbientLight(Color.BLACK);
         spotlightLight.setSpecularLight(Color.BLACK);
         spotlightLight.setLightColor(Color.BLUE);
         spotlightLight.setGlobalAmbientLight(Color.BLACK);
-        lights.add(spotlightLight);
+//        lights.add(spotlightLight);
         /**
          * Point Light
          */
-//        MyPointLight pointLight = new MyPointLight();
-//        pointLight.setPosition(new float[]{-1.5f, 3f, 0f, 1f}); //position
-//        pointLight.setAmbientLight(Color.BLACK);
-//        pointLight.setSpecularLight(Color.BLACK);
-//        pointLight.setLightColor(Color.GREEN);
-//        pointLight.setGlobalAmbientLight(Color.BLACK);
+        MyPointLight pointLight = new MyPointLight();
+        pointLight.setPosition(new float[]{-1.5f, 3f, 0f, 1f}); //position
+        pointLight.setAmbientLight(Color.BLACK);
+        pointLight.setSpecularLight(Color.BLACK);
+        pointLight.setLightColor(Color.GREEN);
+        pointLight.setGlobalAmbientLight(Color.BLACK);
 //        lights.add(pointLight);
         return lights;
     }

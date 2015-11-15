@@ -6,16 +6,9 @@ public class MyPointLight extends MyLight {
 
     private static final String vsPath = "blinn-phong-vert.glsl";
     private static final String fsPath = "point/point-blinn-phong-frag.glsl";
-    private static final String shadowFsPath = "shadow-light/shadow-point-frag.glsl";
-    private static final String vsShadowPath = "shadow-light/shadow-vert.glsl";
 
     public MyPointLight() {
-        super(vsPath, fsPath, shadowFsPath, vsShadowPath);
-    }
-
-    @Override
-    public MyCamera initCamera() {
-        return null;
+        super(vsPath, fsPath);
     }
 
     public void render() {
