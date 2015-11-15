@@ -1,4 +1,4 @@
-varying vec4 position; //position of point, eye space
+varying vec4 position;
 
 uniform mat4 u_modelViewProjectionMatrix;
 uniform mat4 u_modelViewMatrix;

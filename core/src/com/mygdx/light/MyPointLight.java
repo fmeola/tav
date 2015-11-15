@@ -1,6 +1,6 @@
 package com.mygdx.light;
 
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.mygdx.camera.MyCamera;
 
 public class MyPointLight extends MyLight {
 
@@ -11,6 +11,11 @@ public class MyPointLight extends MyLight {
 
     public MyPointLight() {
         super(vsPath, fsPath, shadowFsPath, vsShadowPath);
+    }
+
+    @Override
+    public MyCamera initCamera() {
+        return null;
     }
 
     public void render() {

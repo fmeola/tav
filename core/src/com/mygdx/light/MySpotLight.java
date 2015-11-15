@@ -1,6 +1,7 @@
 package com.mygdx.light;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.mygdx.camera.MyCamera;
 
 /**
  * http://www.3dgep.com/transformation-and-lighting-in-cg/#Spotlight_Effects
@@ -26,6 +27,11 @@ public class MySpotLight extends MyLight {
         shaderProgram.setUniform4fv("lightPosition", position, 0, position.length);
         shaderProgram.setUniform4fv("lightDirection", direction, 0, direction.length);
         shaderProgram.setUniformf("spotCutOff", cutOff);
+    }
+
+    @Override
+    public MyCamera initCamera() {
+        return null;
     }
 
     public float[] getDirection() {

@@ -3,8 +3,19 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.mygdx.camera.MyCamera;
+
+import java.awt.*;
 
 public class GameInputProcessor implements InputProcessor {
+
+    private MyCamera camera;
+    private Point mousePosition;
+
+    public GameInputProcessor(MyCamera camera, Point mousePosition) {
+        this.camera = camera;
+        this.mousePosition = mousePosition;
+    }
 
     @Override
     public boolean keyDown(int keycode) {
@@ -20,16 +31,16 @@ public class GameInputProcessor implements InputProcessor {
     public boolean keyTyped(char character) {
         float moveAmount = 0.1f;
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            MyGdxGame.camera.position.x -= moveAmount;
+            camera.position.x -= moveAmount;
             return true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            MyGdxGame.camera.position.x += moveAmount;
+            camera.position.x += moveAmount;
             return true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            MyGdxGame.camera.position.y += moveAmount;
+            camera.position.y += moveAmount;
             return true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            MyGdxGame.camera.position.y -= moveAmount;
+            camera.position.y -= moveAmount;
             return true;
         }
         return false;

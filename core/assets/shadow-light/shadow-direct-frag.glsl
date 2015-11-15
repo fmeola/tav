@@ -1,6 +1,5 @@
 varying vec4 position; //position of point, eye space
 
-
 void main()
 {
     //encode z in eye space

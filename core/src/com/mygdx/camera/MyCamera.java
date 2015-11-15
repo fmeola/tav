@@ -50,4 +50,16 @@ public abstract class MyCamera {
         return new float[] {this.position.x, this.position.y, this.position.z};
     }
 
+    public void setPosition(Vector3 position) {
+        this.position = position;
+    }
+
+    public void setFar(float far) {
+        this.far = far;
+    }
+
+    public void setNear(float near) {
+        this.near = near;
+    }
+
 }

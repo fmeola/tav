@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
+import com.mygdx.camera.MyGdxPerspectiveCamera;
 import com.mygdx.light.MyDirectionalLight;
 import com.mygdx.light.MyLight;
 import com.mygdx.light.MyPointLight;
@@ -32,6 +33,16 @@ public class GameElements {
         MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera.position.set(0f, 0f, 2f);
         //camera.lookAt(0, 0, 0);
+        camera.near = 0.1f;
+        camera.far = 300f;
+        return camera;
+    }
+
+    public static MyCamera initAnimationCamera() {
+        MyCamera camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
+        camera.position.set(0f, 5f, 25f);
+//        camera.lookAt(0, 0, 0);
         camera.near = 0.1f;
         camera.far = 300f;
         return camera;

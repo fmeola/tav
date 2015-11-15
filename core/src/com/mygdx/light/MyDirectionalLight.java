@@ -1,6 +1,7 @@
 package com.mygdx.light;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 
 public class MyDirectionalLight extends MyLight {

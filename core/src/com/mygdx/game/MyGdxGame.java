@@ -32,13 +32,11 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private boolean firstTime;
 
+    //The maximum number of triangles our mesh will hold
+    public static final int MAX_TRIS = 1;
+
     @Override
     public void create () {
-        /**
-         * Keyboard & Mouse
-         */
-        Gdx.input.setInputProcessor(new GameInputProcessor());
-
         /**
          * OpenGL.
          */
@@ -70,6 +68,26 @@ public class MyGdxGame extends ApplicationAdapter {
          * Blending para varios shaders.
          */
         for(MyLight light: lights){
+            /*
+             * Generar Shadow Map
+             */
+            MyCamera lightCamera = light.initCamera();
+            ShaderProgram shadowShaderProgram = light.getShadowShaderProgram();
+
+            shadowShaderProgram.begin();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+            Gdx.gl.glClearColor(0,0,0,0);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+            for(DisplayableObject obj : objects) {
+                shadowShaderProgram.setUniformMatrix("u_worldView", lightCamera.getPVMatrix().mul(obj.getTMatrix()));
+//                shadowShaderProgram.setUniformMatrix("u_modelViewMatrix", lightCamera.getVMatrix().mul(obj.getTMatrix()));
+//                obj.getMaterial().render(shadowShaderProgram);
+                obj.getTexture().bind();
+                obj.getMesh().render(shadowShaderProgram, GL20.GL_TRIANGLES);
+            }
+            shadowShaderProgram.end();
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+
             if(!firstTime){
                 Gdx.gl.glEnable(GL20.GL_BLEND);
                 Gdx.gl.glBlendFunc(GL20.GL_ONE,GL20.GL_ONE);
@@ -121,10 +139,8 @@ public class MyGdxGame extends ApplicationAdapter {
             /*
              * Pintar
             */
-
             ShaderProgram shaderProgram = light.getShaderProgram();
             shaderProgram.begin();
-
             shaderProgram.setUniform3fv("cameraPosition", camera.getPosition(), 0, 3);
             shaderProgram.setUniformMatrix("u_normalMatrix", camera.getNormalMatrix());
             shaderProgram.setUniformMatrix("u_viewMatrix", camera.getVMatrix());
