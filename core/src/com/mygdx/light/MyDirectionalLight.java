@@ -22,10 +22,12 @@ public class MyDirectionalLight extends MyLight {
     
     @Override
     public void initCamera() {
-        camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
-        camera.position.set(this.position[0]*10f, this.position[1]*10f, this.position[2]*10f);
+        camera = new MyGdxOrthographicCamera(20, 20);
+        //camera.position.set(this.position[0]*10f, this.position[1]*10f, this.position[2]*10f);
+        camera.position.set(0, 10, 0);
+        camera.rotX = -90;
         camera.near = 0.1f;
-        camera.far = 300f;
+        camera.far = 30f;
     }
 
 }

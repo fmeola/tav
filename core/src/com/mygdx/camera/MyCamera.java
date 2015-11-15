@@ -32,8 +32,8 @@ public abstract class MyCamera {
 
     public Matrix4 getVMatrix() {
         return Translation.getTranslationMatrix(position.x, position.y, position.z).
-                mul(Rotation.getYRotationMatrix(rotX)).
-                mul(Rotation.getXRotationMatrix(rotY)).inv();
+                mul(Rotation.getXRotationMatrix(rotX)).
+                mul(Rotation.getYRotationMatrix(rotY)).inv();
     }
 
     public abstract Matrix4 getPMatrix();

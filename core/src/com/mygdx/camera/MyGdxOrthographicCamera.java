@@ -11,10 +11,10 @@ public class MyGdxOrthographicCamera extends MyCamera {
     public Matrix4 getPMatrix() {
         Matrix4 projectionMatrix = new Matrix4(
                 new float[]{
-                        1/width,0,0,0,
-                        0,1/height,0,0,
-                        0,0,-2/(far-near),0,
-                        0, 0, -1*(far+near)/(far-near),1});
+                        1f/width,0,0,0,
+                        0,1f/height,0,0,
+                        0,0,-2f/(far-near),0,
+                        0, 0, -(far+near)/(far-near),1f});
         return projectionMatrix;
     }
 

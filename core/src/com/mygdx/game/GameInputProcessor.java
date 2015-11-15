@@ -55,12 +55,14 @@ public class GameInputProcessor implements InputProcessor {
         float value;
         if (screenX != MyGdxGame.mousePosition.x) {
             value = screenX > MyGdxGame.mousePosition.x ? -0.01f : 0.01f;
-            MyGdxGame.camera.rotX += value;
+            MyGdxGame.camera.rotY += value;
+            //MyGdxGame.shadowCamera.rotY += value;
             MyGdxGame.mousePosition.x = screenX;
         }
         if (screenY != MyGdxGame.mousePosition.y) {
             value = screenY > MyGdxGame.mousePosition.y ? -0.01f : 0.01f;
-            MyGdxGame.camera.rotY += value;
+            MyGdxGame.camera.rotX += value;
+//            MyGdxGame.shadowCamera.rotX += value;
             MyGdxGame.mousePosition.y = screenY;
         }
         return true;

@@ -17,6 +17,7 @@ uniform mat4 u_modelViewMatrixLight;
 uniform vec4 matSpecular, matAmbient, matDiffuse;
 uniform float matShininess;
 uniform sampler2D u_texture;
+uniform sampler2D u_shadowMap;
 
 void main()
 {
@@ -26,10 +27,15 @@ void main()
     //decode
     
     vec4 aux = vec4(1., 1./255., 1./65025., 1./160581375.);
-    float zLight = dot(aux, gl_Color); //z menor en eye space de la luz
-    float zCam = (u_modelViewMatrixLight*position).z; //z en eye space de la luz
+    vec4 posFromLight = (u_modelViewMatrixLight*positionObject);
+    vec2 shadowCords = (posFromLight.xy+1.)/2.;
+    vec4 shadowColor = texture2D(u_shadowMap, shadowCords);
+    //z menor vista desde la luz
+    float zShadow = dot(shadowColor, aux); //z mas cercana a la luz (eye space de la luz)
+    //z actual vista desde la luz
+    float zLight = posFromLight.z;
 
-    if (zLight < zCam) {
+    if (zShadow < zLight) {
         visibility = 0.;
     }
 

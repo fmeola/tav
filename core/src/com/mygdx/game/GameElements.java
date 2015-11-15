@@ -43,7 +43,7 @@ public class GameElements {
          * Directional Light
          */
         MyDirectionalLight directionalLight = new MyDirectionalLight();
-        directionalLight.setPosition(new float[]{-1f, 1f, 0f, 0f}); //direction
+        directionalLight.setPosition(new float[]{0f, 1f, 0f, 0f}); //direction
         directionalLight.setAmbientLight(Color.BLACK);
         directionalLight.setSpecularLight(Color.BLACK);
         directionalLight.setLightColor(Color.WHITE);
@@ -85,9 +85,9 @@ public class GameElements {
                 VertexAttribute.Position(), VertexAttribute.Normal(), VertexAttribute.TexCoords(0));
         mesh.setVertices(data.meshes.get(0).vertices);
         mesh.setIndices(data.meshes.get(0).parts[0].indices);
-        spaceships.add(new DisplayableObject(mesh, new Vector3(-1.5f, 0, 0), texture, material));
+//        spaceships.add(new DisplayableObject(mesh, new Vector3(-1.5f, 0, 0), texture, material));
         spaceships.add(new DisplayableObject(mesh, new Vector3(0, 0, 0), texture, material));
-        spaceships.add(new DisplayableObject(mesh, new Vector3(1.5f, 0, 0), texture, material));
+//        spaceships.add(new DisplayableObject(mesh, new Vector3(1.5f, 0, 0), texture, material));
         return spaceships;
     }
 
