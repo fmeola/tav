@@ -74,27 +74,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
                 MyDirectionalLight directionalLight = (MyDirectionalLight) light;
 
-                /*
-                 * Generar Shadow Map
-                 */
-                MyCamera lightCamera = directionalLight.initCamera();
-                ShaderProgram shadowShaderProgram = light.getShadowShaderProgram();
-
-                shadowShaderProgram.begin();
-
-                Gdx.gl.glDisable(GL20.GL_BLEND);
-                Gdx.gl.glClearColor(0,0,0,0);
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-                for(DisplayableObject obj : objects) {
-//                shadowShaderProgram.setUniformMatrix("u_worldView", lightCamera.getPVMatrix().mul(obj.getTMatrix()));
-                    shadowShaderProgram.setUniformMatrix("u_modelViewMatrix", lightCamera.getVMatrix().mul(obj.getTMatrix()));
-//                obj.getMaterial().render(shadowShaderProgram);
-                    obj.getTexture().bind();
-                    obj.getMesh().render(shadowShaderProgram, GL20.GL_TRIANGLES);
-                }
-                shadowShaderProgram.end();
-                Gdx.gl.glEnable(GL20.GL_BLEND);
-
                 if(!firstTime){
                     Gdx.gl.glEnable(GL20.GL_BLEND);
                     Gdx.gl.glBlendFunc(GL20.GL_ONE,GL20.GL_ONE);
@@ -104,7 +83,7 @@ public class MyGdxGame extends ApplicationAdapter {
                  * Generar Shadow Map
                  */
                 shadowCamera = directionalLight.getCamera();
-                shadowShaderProgram = light.getShadowShaderProgram();
+                ShaderProgram shadowShaderProgram = light.getShadowShaderProgram();
 
                 FrameBuffer shadowBuffer = new FrameBuffer(Pixmap.Format.RGBA8888,Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
                 shadowBuffer.begin();

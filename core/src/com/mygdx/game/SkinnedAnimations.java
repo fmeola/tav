@@ -91,7 +91,7 @@ public class SkinnedAnimations implements ApplicationListener {
         animationController.update(Gdx.graphics.getDeltaTime());
 
         shaderProgram.begin();
-        Array<Renderable> renderables = new Array<>();
+        Array<Renderable> renderables = new Array();
         final Pool<Renderable> pool = new Pool<Renderable>() {
             @Override
             protected Renderable newObject () {
