@@ -2,6 +2,7 @@ package com.mygdx.light;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 
@@ -31,7 +32,7 @@ public class MyDirectionalLight extends MyLight {
     public MyCamera initCamera() {
         camera = new MyGdxOrthographicCamera(20, 20);
         //camera.position.set(this.position[0]*10f, this.position[1]*10f, this.position[2]*10f);
-        camera.position.set(0, 10, 0);
+        camera.position.set(this.position[0]*5, this.position[1]*5, this.position[2]*5);
         camera.rotX = -90;
         camera.near = 0.1f;
         camera.far = 30f;
@@ -40,6 +41,16 @@ public class MyDirectionalLight extends MyLight {
 
     public MyCamera getCamera() {
         return camera;
+    }
+    
+    @Override
+    public void setCameraPosition(float[] position) {
+        this.camera.setPosition(new Vector3(position));
+    }
+    
+    @Override
+    public float[] getCameraPosition() {
+        return this.camera.getPosition();
     }
 
 }

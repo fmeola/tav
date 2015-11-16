@@ -3,7 +3,6 @@ package com.mygdx.light;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.mygdx.camera.MyCamera;
 
 public abstract class MyLight {
     
@@ -110,6 +109,10 @@ public abstract class MyLight {
     public float[] getPosition() {
         return position;
     }
+    
+    abstract public void setCameraPosition(float[] position);
+    
+    abstract public float[] getCameraPosition();
     
 
 }

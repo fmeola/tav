@@ -11,7 +11,7 @@ uniform vec4 lightAmbient;
 uniform vec4 lightColor;
 uniform vec4 globalAmbient;
 uniform mat4 u_viewMatrix;
-uniform mat4 u_modelViewMatrixLight;
+uniform mat4 u_modelViewProjectionMatrixLight;
 
 //material uniforms
 uniform vec4 matSpecular, matAmbient, matDiffuse;
@@ -27,15 +27,15 @@ void main()
     //decode
     
     vec4 aux = vec4(1., 1./255., 1./65025., 1./160581375.);
-    vec4 posFromLight = (u_modelViewMatrixLight*positionObject);
+    vec4 posFromLight = (u_modelViewProjectionMatrixLight*positionObject);
     vec2 shadowCords = (posFromLight.xy+1.)/2.;
     vec4 shadowColor = texture2D(u_shadowMap, shadowCords);
     //z menor vista desde la luz
     float zShadow = dot(shadowColor, aux); //z mas cercana a la luz (eye space de la luz)
     //z actual vista desde la luz
-    float zLight = posFromLight.z;
+    float zLight = -posFromLight.z;
 
-    if (zShadow < zLight) {
+    if (zLight < zShadow-0.005) {
         visibility = 0.;
     }
 

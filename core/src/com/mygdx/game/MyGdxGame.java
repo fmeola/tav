@@ -3,8 +3,11 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
@@ -91,7 +94,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 shadowShaderProgram.begin();
                 for(DisplayableObject obj : objects) {
                     shadowShaderProgram.setUniformMatrix("u_modelViewProjectionMatrix", shadowCamera.getPVMatrix().mul(obj.getTMatrix()));
-                    shadowShaderProgram.setUniformMatrix("u_modelViewMatrix", shadowCamera.getVMatrix().mul(obj.getTMatrix()));
+                    //shadowShaderProgram.setUniformMatrix("u_modelViewMatrix", shadowCamera.getVMatrix().mul(obj.getTMatrix()));
                     obj.getTexture().bind();
                     obj.getMesh().render(shadowShaderProgram, GL20.GL_TRIANGLES);
                 }
@@ -101,7 +104,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 Texture shadowMap = shadowBuffer.getColorBufferTexture();
 
 //            dibujar shadow en pantalla
-//
+
 //            Mesh mesh = new Mesh(true, 4, 6, new VertexAttribute(VertexAttributes.Usage.Position, 4, "a_position"), new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2, "a_texCoord0"));
 //            mesh.setVertices(new float[] { //position, texCoord
 //                -1f, -1f, 0f, 1f, 0f, 0f,
@@ -131,7 +134,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 /**
                  * Movimiento de la luz.
                  */
-                //GameElements.moveLight(light);
+                GameElements.moveLight(light);
 
                 /**
                  * Light Render
@@ -144,7 +147,8 @@ public class MyGdxGame extends ApplicationAdapter {
                 for(DisplayableObject obj : objects) {
                     shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix().mul(obj.getTMatrix()));
                     shaderProgram.setUniformMatrix("u_modelViewMatrix", camera.getVMatrix().mul(obj.getTMatrix()));
-                    shaderProgram.setUniformMatrix("u_modelViewMatrixLight", shadowCamera.getVMatrix().mul(obj.getTMatrix()));
+                    //shaderProgram.setUniformMatrix("u_modelViewMatrixLight", shadowCamera.getVMatrix().mul(obj.getTMatrix()));
+                    shaderProgram.setUniformMatrix("u_modelViewProjectionMatrixLight", shadowCamera.getPVMatrix().mul(obj.getTMatrix()));
                     obj.getMaterial().render(shaderProgram);
                     obj.getTexture().bind(0);
                     shadowMap.bind(1);

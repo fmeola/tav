@@ -126,6 +126,7 @@ public class GameElements {
          */
         if(light instanceof MyDirectionalLight) {
             float lightPosition[] = light.getPosition();
+            float cameraPosition[] = light.getCameraPosition();
             if (rightDirDirectional) {
                 ++countDirectional;
                 lightPosition[0] += diff;
@@ -136,8 +137,8 @@ public class GameElements {
             if (countDirectional == LIGHT_MOVE_LIMIT || countDirectional == -LIGHT_MOVE_LIMIT) {
                 rightDirDirectional = !rightDirDirectional;
             }
-            light.setPosition(new float[]{lightPosition[0], lightPosition[1], lightPosition[2]});
-            return ;
+            light.setPosition(lightPosition);
+            light.setCameraPosition(new float[]{lightPosition[0]*5f, lightPosition[1]*5f, lightPosition[2]*5f});
         }
         /**
          * Movimiento de la SpotLight.

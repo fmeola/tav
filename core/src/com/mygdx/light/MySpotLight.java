@@ -33,6 +33,16 @@ public class MySpotLight extends MyLight {
     public float getCutOff() {
         return cutOff;
     }
+
+    @Override
+    public void setCameraPosition(float[] position) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public float[] getCameraPosition() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     
