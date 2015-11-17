@@ -130,6 +130,7 @@ public class SkinnedAnimations extends ApplicationAdapter {
             texture.bind();
         }
         shaderProgram.end();
+        renderables.clear();
     }
 
     @Override
