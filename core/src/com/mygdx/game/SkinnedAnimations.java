@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -26,23 +26,23 @@ import java.awt.*;
  * 2) https://github.com/libgdx/fbx-conv
  * 3) http://dagger.se/?p=71
  */
-public class SkinnedAnimations implements ApplicationListener {
+public class SkinnedAnimations extends ApplicationAdapter {
+
+    private AssetManager assets;
+    private ModelInstance characterInstance;
+    private AnimationController animationController;
+    private Texture texture;
 
     private ShaderProgram shaderProgram;
     private MyCamera camera;
-    private AssetManager assets = new AssetManager();
-    private ModelInstance characterInstance;
-    private AnimationController animationController;
+    private Point mousePosition = new Point(0,0);
 
     private static final String VS_PATH = "animation/animation-vs.glsl";
     private static final String FS_PATH = "animation/animation-fs.glsl";
     private static final String ANIMATION_FILE_PATH = "animation/Dave.g3db";
+    private static final String TEXTURE_PATH = "animation/uv_dave_mapeo.jpg";
     private static final int BONE_MATRIX_COUNT = 32;
     private static final int MATRIX_SIZE = 16;
-    private static final String TEXTURE_PATH = "animation/uv_dave_mapeo.jpg";
-
-    Texture texture;
-    public static Point mousePosition = new Point(0,0);
 
     @Override
     public void create() {
@@ -64,6 +64,7 @@ public class SkinnedAnimations implements ApplicationListener {
         /**
          * Creación del Modelo y la Animación
          */
+        assets = new AssetManager();
         assets.load(ANIMATION_FILE_PATH, Model.class);
         texture = new Texture(TEXTURE_PATH);
         UBJsonReader jsonReader = new UBJsonReader();
@@ -114,7 +115,6 @@ public class SkinnedAnimations implements ApplicationListener {
         }
 
         Matrix4 mvpMatrix = new Matrix4();
-        Matrix4 nMatrix = new Matrix4();
 
         for (Renderable render : renderables) {
             mvpMatrix.set(camera.getPVMatrix());
@@ -136,18 +136,6 @@ public class SkinnedAnimations implements ApplicationListener {
     public void dispose() {
         assets.dispose();
         shaderProgram.dispose();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
     }
 
 }

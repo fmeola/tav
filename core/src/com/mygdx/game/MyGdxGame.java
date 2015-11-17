@@ -3,11 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
@@ -20,8 +16,8 @@ import java.util.List;
 
 public class MyGdxGame extends ApplicationAdapter {
 
-    public static Point mousePosition = new Point(0,0);
-    public static MyCamera camera;
+    public Point mousePosition = new Point(0,0);
+    public MyCamera camera;
 
     private List<DisplayableObject> objects;
     private List<MyLight> lights;
@@ -153,13 +149,9 @@ public class MyGdxGame extends ApplicationAdapter {
                 }
 
                 shaderProgram.end();
-
             }
-
             firstTime = false;
-
         }
-
     }
 
     @Override
