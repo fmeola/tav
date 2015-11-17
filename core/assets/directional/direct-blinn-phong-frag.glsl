@@ -21,12 +21,13 @@ uniform sampler2D u_shadowMap;
 
 void main()
 {
+    float bias = 0.005;
     float visibility = 1.;
 
-    //check z
     //decode
-    
     vec4 aux = vec4(1., 1./255., 1./65025., 1./160581375.);
+
+    //check z
     vec4 posFromLight = (u_modelViewProjectionMatrixLight*positionObject);
     vec2 shadowCords = (posFromLight.xy+1.)/2.;
     vec4 shadowColor = texture2D(u_shadowMap, shadowCords);
@@ -35,8 +36,8 @@ void main()
     //z actual vista desde la luz
     float zLight = -posFromLight.z;
 
-    if (zLight < zShadow-0.005) {
-        visibility = 0.;
+    if (zLight < zShadow - bias) {
+        visibility -= 0.5;
     }
 
     vec4 lightDirectionEye = u_viewMatrix*direction;
@@ -58,5 +59,5 @@ void main()
     // Compute ambient term
     vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
 
-    gl_FragColor = visibility*texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
+    gl_FragColor = visibility * texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
 }

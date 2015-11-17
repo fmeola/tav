@@ -18,7 +18,6 @@ uniform sampler2D u_texture;
 
 void main()
 {
-
     vec4 lightPositionEye = u_viewMatrix*lightPosition;
     vec4 cameraPositionEye = u_viewMatrix*vec4(cameraPosition,1.);
 

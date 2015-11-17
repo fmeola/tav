@@ -22,12 +22,13 @@ public class MyGdxGame extends ApplicationAdapter {
 
     public static Point mousePosition = new Point(0,0);
     public static MyCamera camera;
-    public static MyCamera shadowCamera;
 
     private List<DisplayableObject> objects;
     private List<MyLight> lights;
 
     private boolean firstTime;
+
+    private FrameBuffer shadowBuffer;
 
     @Override
     public void create () {
@@ -47,89 +48,57 @@ public class MyGdxGame extends ApplicationAdapter {
         camera = GameElements.initCamera();
 
         /**
+         * ShadowBuffer para el ShadowMap de la Directional Light.
+         */
+        shadowBuffer = new FrameBuffer(Pixmap.Format.RGBA8888,Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+
+        /**
          * Keyboard & Mouse
          */
         Gdx.input.setInputProcessor(new GameInputProcessor(camera, mousePosition));
-
-        /*
-         * Init light cameras.
-         */
-        for (MyLight light : lights) {
-            if(light instanceof MyDirectionalLight) {
-                ((MyDirectionalLight) light).initCamera();
-            }
-        }
-
     }
 
     @Override
     public void render () {
         firstTime = true;
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        /**
-         * Blending para varios shaders.
-         */
+
         for(MyLight light: lights){
+
+            /**
+             * Blending para varios shaders.
+             */
+            if(!firstTime){
+                Gdx.gl.glEnable(GL20.GL_BLEND);
+                Gdx.gl.glBlendFunc(GL20.GL_ONE,GL20.GL_ONE);
+            }
+
             if(light instanceof MyDirectionalLight) {
                 /**
                  * Render para luces con shadowMap.
                  */
 
-                MyDirectionalLight directionalLight = (MyDirectionalLight) light;
-
-                if(!firstTime){
-                    Gdx.gl.glEnable(GL20.GL_BLEND);
-                    Gdx.gl.glBlendFunc(GL20.GL_ONE,GL20.GL_ONE);
-                }
-
-                /*
-                 * Generar Shadow Map
+                /**
+                 * Shadow Shader Program
                  */
-                shadowCamera = directionalLight.getCamera();
-                ShaderProgram shadowShaderProgram = light.getShadowShaderProgram();
+                MyDirectionalLight directionalLight = (MyDirectionalLight) light;
+                ShaderProgram shadowShaderProgram = directionalLight.getShadowShaderProgram();
+                MyCamera shadowCamera = directionalLight.getCamera();
 
-                FrameBuffer shadowBuffer = new FrameBuffer(Pixmap.Format.RGBA8888,Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-                shadowBuffer.begin();
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
                 shadowShaderProgram.begin();
+
+                shadowBuffer.begin();
+
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
                 for(DisplayableObject obj : objects) {
                     shadowShaderProgram.setUniformMatrix("u_modelViewProjectionMatrix", shadowCamera.getPVMatrix().mul(obj.getTMatrix()));
-                    //shadowShaderProgram.setUniformMatrix("u_modelViewMatrix", shadowCamera.getVMatrix().mul(obj.getTMatrix()));
-                    obj.getTexture().bind();
                     obj.getMesh().render(shadowShaderProgram, GL20.GL_TRIANGLES);
                 }
-                shadowShaderProgram.end();
+
                 shadowBuffer.end();
 
-                Texture shadowMap = shadowBuffer.getColorBufferTexture();
-
-//            dibujar shadow en pantalla
-
-//            Mesh mesh = new Mesh(true, 4, 6, new VertexAttribute(VertexAttributes.Usage.Position, 4, "a_position"), new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2, "a_texCoord0"));
-//            mesh.setVertices(new float[] { //position, texCoord
-//                -1f, -1f, 0f, 1f, 0f, 0f,
-//                1f, -1f, 0f, 1f, 1f, 0f,
-//                1f, 1f, 0f, 1f, 1f, 1f,
-//                -1f, 1f, 0f, 1f, 0f, 1f
-//       });
-//            mesh.setIndices(new short[]{0,1,2,2,3,0});
-//            String vs = Gdx.files.internal("auxShaderVert.glsl").readString();
-//            String fs = Gdx.files.internal("auxShaderFrag.glsl").readString();
-//            ShaderProgram auxShader = new ShaderProgram(vs,fs);
-//            auxShader.begin();
-//            shadowMap.bind();
-//            auxShader.setUniformi("shadowMap", 0);
-//            mesh.render(auxShader,GL20.GL_TRIANGLES);
-//            auxShader.end();
-
-                /*
-                 * Pintar
-                 */
-                ShaderProgram shaderProgram = light.getShaderProgram();
-                shaderProgram.begin();
-                shaderProgram.setUniform3fv("cameraPosition", camera.getPosition(), 0, 3);
-                shaderProgram.setUniformMatrix("u_normalMatrix", camera.getNormalMatrix());
-                shaderProgram.setUniformMatrix("u_viewMatrix", camera.getVMatrix());
+                shadowShaderProgram.end();
 
                 /**
                  * Movimiento de la luz.
@@ -137,67 +106,44 @@ public class MyGdxGame extends ApplicationAdapter {
                 GameElements.moveLight(light);
 
                 /**
-                 * Light Render
+                 * Shader Program
                  */
+                ShaderProgram shaderProgram = light.getShaderProgram();
+
+                shaderProgram.begin();
+
+                shaderProgram.setUniform3fv("cameraPosition", camera.getPosition(), 0, 3);
+                shaderProgram.setUniformMatrix("u_normalMatrix", camera.getNormalMatrix());
+                shaderProgram.setUniformMatrix("u_viewMatrix", camera.getVMatrix());
+
                 light.render();
 
-                /**
-                 * Objects Render
-                 */
                 for(DisplayableObject obj : objects) {
                     shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix().mul(obj.getTMatrix()));
                     shaderProgram.setUniformMatrix("u_modelViewMatrix", camera.getVMatrix().mul(obj.getTMatrix()));
-                    //shaderProgram.setUniformMatrix("u_modelViewMatrixLight", shadowCamera.getVMatrix().mul(obj.getTMatrix()));
                     shaderProgram.setUniformMatrix("u_modelViewProjectionMatrixLight", shadowCamera.getPVMatrix().mul(obj.getTMatrix()));
                     obj.getMaterial().render(shaderProgram);
                     obj.getTexture().bind(0);
-                    shadowMap.bind(1);
                     shaderProgram.setUniformi("u_texture", 0);
+                    shadowBuffer.getColorBufferTexture().bind(1);
                     shaderProgram.setUniformi("u_shadowMap", 1);
                     obj.getMesh().render(shaderProgram, GL20.GL_TRIANGLES);
                 }
 
                 shaderProgram.end();
-
-                shadowBuffer.dispose();
-
-                firstTime = false;
             } else {
                 /**
                  * Render para luces sin shadowMap.
                  */
 
-                /**
-                 * OpenGL
-                 */
-                Gdx.gl.glEnable(GL20.GL_BLEND);
-                if(!firstTime){
-                    Gdx.gl.glEnable(GL20.GL_BLEND);
-                    Gdx.gl.glBlendFunc(GL20.GL_ONE,GL20.GL_ONE);
-                }
-
-                /*
-                 * Pintar
-                 */
                 ShaderProgram shaderProgram = light.getShaderProgram();
+
                 shaderProgram.begin();
+
                 shaderProgram.setUniform3fv("cameraPosition", camera.getPosition(), 0, 3);
                 shaderProgram.setUniformMatrix("u_normalMatrix", camera.getNormalMatrix());
                 shaderProgram.setUniformMatrix("u_viewMatrix", camera.getVMatrix());
-
-                /**
-                 * Movimiento de la luz.
-                 */
-                GameElements.moveLight(light);
-
-                /**
-                 * Light Render
-                 */
                 light.render();
-
-                /**
-                 * Objects Render
-                 */
                 for(DisplayableObject obj : objects) {
                     shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix().mul(obj.getTMatrix()));
                     shaderProgram.setUniformMatrix("u_modelViewMatrix", camera.getVMatrix().mul(obj.getTMatrix()));
@@ -208,16 +154,23 @@ public class MyGdxGame extends ApplicationAdapter {
 
                 shaderProgram.end();
 
-                firstTime = false;
             }
+
+            firstTime = false;
+
         }
+
     }
 
     @Override
     public void dispose() {
         for(MyLight l : lights) {
             l.getShaderProgram().dispose();
+            if(l instanceof MyDirectionalLight) {
+                ((MyDirectionalLight) l).getShadowShaderProgram().dispose();
+            }
         }
+        shadowBuffer.dispose();
     }
 
 }

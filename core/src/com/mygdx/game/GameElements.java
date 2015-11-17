@@ -63,13 +63,13 @@ public class GameElements {
         /**
          * Spot Light
          */
-        MySpotLight spotlightLight = new MySpotLight(new float[]{0f,-1f,0f,0f}, 30f);
-        float[] spotlightLightPosition = new float[]{-1f, 1f, 0f, 1f};
-        spotlightLight.setPosition(spotlightLightPosition);
-        spotlightLight.setAmbientLight(Color.BLACK);
-        spotlightLight.setSpecularLight(Color.BLACK);
-        spotlightLight.setLightColor(Color.BLUE);
-        spotlightLight.setGlobalAmbientLight(Color.BLACK);
+//        MySpotLight spotlightLight = new MySpotLight(new float[]{0f,-1f,0f,0f}, 30f);
+//        float[] spotlightLightPosition = new float[]{-1f, 1f, 0f, 1f};
+//        spotlightLight.setPosition(spotlightLightPosition);
+//        spotlightLight.setAmbientLight(Color.BLACK);
+//        spotlightLight.setSpecularLight(Color.BLACK);
+//        spotlightLight.setLightColor(Color.BLUE);
+//        spotlightLight.setGlobalAmbientLight(Color.BLACK);
 //        lights.add(spotlightLight);
         /**
          * Point Light
@@ -96,9 +96,9 @@ public class GameElements {
                 VertexAttribute.Position(), VertexAttribute.Normal(), VertexAttribute.TexCoords(0));
         mesh.setVertices(data.meshes.get(0).vertices);
         mesh.setIndices(data.meshes.get(0).parts[0].indices);
-//        spaceships.add(new DisplayableObject(mesh, new Vector3(-1.5f, 0, 0), texture, material));
+        spaceships.add(new DisplayableObject(mesh, new Vector3(-1.5f, 0, 0), texture, material));
         spaceships.add(new DisplayableObject(mesh, new Vector3(0, 0, 0), texture, material));
-//        spaceships.add(new DisplayableObject(mesh, new Vector3(1.5f, 0, 0), texture, material));
+        spaceships.add(new DisplayableObject(mesh, new Vector3(1.5f, 0, 0), texture, material));
         return spaceships;
     }
 
@@ -125,8 +125,8 @@ public class GameElements {
          * Movimiento de la Directional Light
          */
         if(light instanceof MyDirectionalLight) {
-            float lightPosition[] = light.getPosition();
-            float cameraPosition[] = light.getCameraPosition();
+            MyDirectionalLight directionalLight = (MyDirectionalLight) light;
+            float lightPosition[] = directionalLight.getPosition();
             if (rightDirDirectional) {
                 ++countDirectional;
                 lightPosition[0] += diff;
@@ -137,8 +137,7 @@ public class GameElements {
             if (countDirectional == LIGHT_MOVE_LIMIT || countDirectional == -LIGHT_MOVE_LIMIT) {
                 rightDirDirectional = !rightDirDirectional;
             }
-            light.setPosition(lightPosition);
-            light.setCameraPosition(new float[]{lightPosition[0]*5f, lightPosition[1]*5f, lightPosition[2]*5f});
+            directionalLight.setPosition(lightPosition);
         }
         /**
          * Movimiento de la SpotLight.

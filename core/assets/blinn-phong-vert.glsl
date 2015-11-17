@@ -13,9 +13,9 @@ attribute vec2 a_texCoord0;
 
 void main()
 {
-        positionObject = a_position;
+    positionObject = a_position;
 	gl_Position = u_worldView * a_position;
-        position = u_modelViewMatrix * a_position;
+    position = u_modelViewMatrix * a_position;
 	v_texCoords = a_texCoord0;
 	normal = normalize(u_normalMatrix * vec4(a_normal,0.0)).xyz;
 }

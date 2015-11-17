@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public abstract class MyLight {
     
-    protected ShaderProgram shaderProgram, shadowShaderProgram;
+    protected ShaderProgram shaderProgram;
 
     protected float[] position; //en DirectionalLight: vector direccion
     
@@ -46,10 +46,6 @@ public abstract class MyLight {
 
     public ShaderProgram getShaderProgram() {
         return shaderProgram;
-    }
-    
-    public ShaderProgram getShadowShaderProgram() {
-        return shadowShaderProgram;
     }
 
     public void setLightColor(float[] lightColor) {
@@ -109,10 +105,5 @@ public abstract class MyLight {
     public float[] getPosition() {
         return position;
     }
-    
-    abstract public void setCameraPosition(float[] position);
-    
-    abstract public float[] getCameraPosition();
-    
 
 }
