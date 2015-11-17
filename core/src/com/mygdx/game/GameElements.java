@@ -21,10 +21,12 @@ import java.util.List;
 
 public class GameElements {
 
-    private static final float diff = 0.05f;
-    private static final int LIGHT_MOVE_LIMIT = (int)(2/diff);
-    private static int countDirectional = -LIGHT_MOVE_LIMIT/2;
-    private static int countSpotlight = -LIGHT_MOVE_LIMIT/2;
+    private static final float dirDiff = 0.05f;
+    private static final float spotDiff = 0.025f;
+    private static final int DIR_LIGHT_MOVE_LIMIT = (int)(2/dirDiff);
+    private static final int SPOT_LIGHT_MOVE_LIMIT = (int)(2/spotDiff);
+    private static int countDirectional = -DIR_LIGHT_MOVE_LIMIT/2;
+    private static int countSpotlight = -SPOT_LIGHT_MOVE_LIMIT/2;
     private static boolean rightDirDirectional = true;
     private static boolean rightDirSpotlight = true;
 
@@ -64,7 +66,7 @@ public class GameElements {
          * Spot Light
          */
         MySpotLight spotlightLight = new MySpotLight(new float[]{-0.5f,-1.5f,0f,0f}, 30f);
-        float[] spotlightLightPosition = new float[]{-1f, 1f, 0f, 1f};
+        float[] spotlightLightPosition = new float[]{0f, 1f, 0f, 1f};
         spotlightLight.setPosition(spotlightLightPosition);
         spotlightLight.setAmbientLight(Color.BLACK);
         spotlightLight.setSpecularLight(Color.BLACK);
@@ -85,7 +87,7 @@ public class GameElements {
     }
 
     public static List<DisplayableObject> initSpaceships() {
-        List<DisplayableObject> spaceships = new ArrayList();
+        List<DisplayableObject> spaceships = new ArrayList<>();
         Texture texture = new Texture("ship/ship.png");
         Material material = new Material();
         ModelLoader loader = new ObjLoader();
@@ -129,12 +131,12 @@ public class GameElements {
             float lightPosition[] = directionalLight.getPosition();
             if (rightDirDirectional) {
                 ++countDirectional;
-                lightPosition[0] += diff;
+                lightPosition[0] += dirDiff;
             } else {
                 --countDirectional;
-                lightPosition[0] -= diff;
+                lightPosition[0] -= dirDiff;
             }
-            if (countDirectional == LIGHT_MOVE_LIMIT || countDirectional == -LIGHT_MOVE_LIMIT) {
+            if (countDirectional == DIR_LIGHT_MOVE_LIMIT || countDirectional == -DIR_LIGHT_MOVE_LIMIT) {
                 rightDirDirectional = !rightDirDirectional;
             }
             directionalLight.setPosition(lightPosition);
@@ -142,21 +144,20 @@ public class GameElements {
         /**
          * Movimiento de la SpotLight.
          */
-//        else if (light instanceof MySpotLight) {
-//            float lightPosition[] = light.getPosition();
-//            if (rightDirSpotlight) {
-//                ++countSpotlight;
-//                lightPosition[0] += diff;
-//            } else {
-//                --countSpotlight;
-//                lightPosition[0] -= diff;
-//            }
-//            if (countSpotlight == LIGHT_MOVE_LIMIT || countSpotlight == -LIGHT_MOVE_LIMIT) {
-//                rightDirSpotlight = !rightDirSpotlight;
-//            }
-//            light.setPosition(new float[]{lightPosition[0], lightPosition[1], lightPosition[2]});
-//            return;
-//        }
+        else if (light instanceof MySpotLight) {
+            float lightPosition[] = light.getPosition();
+            if (rightDirSpotlight) {
+                ++countSpotlight;
+                lightPosition[0] += spotDiff;
+            } else {
+                --countSpotlight;
+                lightPosition[0] -= spotDiff;
+            }
+            if (countSpotlight == SPOT_LIGHT_MOVE_LIMIT || countSpotlight == -SPOT_LIGHT_MOVE_LIMIT) {
+                rightDirSpotlight = !rightDirSpotlight;
+            }
+            light.setPosition(lightPosition);
+        }
     }
 
 }
