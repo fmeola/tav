@@ -33,7 +33,7 @@ public class MyGdxGame extends ApplicationAdapter {
          */
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
         Gdx.gl.glDepthFunc(GL20.GL_LEQUAL);
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
 
         /**
          * Spaceships, quad, lights and camera.
@@ -46,7 +46,7 @@ public class MyGdxGame extends ApplicationAdapter {
         /**
          * ShadowBuffer para el ShadowMap de la Directional Light.
          */
-        shadowBuffer = new FrameBuffer(Pixmap.Format.RGBA8888,Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        shadowBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
         /**
          * Keyboard & Mouse
@@ -68,6 +68,11 @@ public class MyGdxGame extends ApplicationAdapter {
                 Gdx.gl.glEnable(GL20.GL_BLEND);
                 Gdx.gl.glBlendFunc(GL20.GL_ONE,GL20.GL_ONE);
             }
+
+            /**
+             * Movimiento de la luz.
+             */
+            GameElements.moveLight(light);
 
             if(light instanceof MyDirectionalLight) {
                 /**
@@ -97,11 +102,6 @@ public class MyGdxGame extends ApplicationAdapter {
                 shadowShaderProgram.end();
 
                 /**
-                 * Movimiento de la luz.
-                 */
-                GameElements.moveLight(light);
-
-                /**
                  * Shader Program
                  */
                 ShaderProgram shaderProgram = light.getShaderProgram();
@@ -115,6 +115,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 light.render();
 
                 for(DisplayableObject obj : objects) {
+//                    shaderProgram.setUniformMatrix("u_worldView", shadowCamera.getPVMatrix().mul(obj.getTMatrix()));
                     shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix().mul(obj.getTMatrix()));
                     shaderProgram.setUniformMatrix("u_modelViewMatrix", camera.getVMatrix().mul(obj.getTMatrix()));
                     shaderProgram.setUniformMatrix("u_modelViewProjectionMatrixLight", shadowCamera.getPVMatrix().mul(obj.getTMatrix()));
@@ -127,6 +128,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 }
 
                 shaderProgram.end();
+
             } else {
                 /**
                  * Render para luces sin shadowMap.
@@ -152,6 +154,8 @@ public class MyGdxGame extends ApplicationAdapter {
             }
             firstTime = false;
         }
+
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     @Override

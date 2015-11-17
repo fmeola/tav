@@ -19,9 +19,11 @@ uniform float matShininess;
 uniform sampler2D u_texture;
 uniform sampler2D u_shadowMap;
 
+float unpack(const vec4);
+
 void main()
 {
-    float bias = 0.005;
+    float bias = 0.001;
     float visibility = 1.;
 
     //decode
@@ -29,15 +31,15 @@ void main()
 
     //check z
     vec4 posFromLight = (u_modelViewProjectionMatrixLight*positionObject);
-    vec2 shadowCords = (posFromLight.xy+1.)/2.;
-    vec4 shadowColor = texture2D(u_shadowMap, shadowCords);
+    vec3 shadowCords = (posFromLight.xyz+vec3(1,1,1))/2.;
+    vec4 shadowColor = texture2D(u_shadowMap, shadowCords.xy);
     //z menor vista desde la luz
-    float zShadow = dot(shadowColor, aux); //z mas cercana a la luz (eye space de la luz)
+    float zShadow = unpack(shadowColor);
     //z actual vista desde la luz
-    float zLight = -posFromLight.z;
+    float zLight = posFromLight.z;
 
-    if (zLight < zShadow - bias) {
-        visibility -= 0.5;
+    if (shadowCords.z - 0.01 > zShadow) {
+        visibility = 0.;
     }
 
     vec4 lightDirectionEye = u_viewMatrix*direction;
@@ -60,4 +62,10 @@ void main()
     vec4 ambient = matAmbient * (globalAmbient + lightAmbient);
 
     gl_FragColor = visibility * texture2D(u_texture, v_texCoords) * (ambient + diffuse + specular);
+}
+
+float
+unpack(const vec4 value) {
+    vec4 bitSh = vec4(1./(256.*256.*256.), 1./(256.*256.), 1./256., 1);
+    return dot(value, bitSh);
 }

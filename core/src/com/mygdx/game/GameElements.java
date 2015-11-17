@@ -49,7 +49,7 @@ public class GameElements {
     }
 
     public static List<MyLight> initLights() {
-        List<MyLight> lights = new ArrayList();
+        List<MyLight> lights = new ArrayList<>();
         /**
          * Directional Light
          */
@@ -63,13 +63,13 @@ public class GameElements {
         /**
          * Spot Light
          */
-//        MySpotLight spotlightLight = new MySpotLight(new float[]{0f,-1f,0f,0f}, 30f);
-//        float[] spotlightLightPosition = new float[]{-1f, 1f, 0f, 1f};
-//        spotlightLight.setPosition(spotlightLightPosition);
-//        spotlightLight.setAmbientLight(Color.BLACK);
-//        spotlightLight.setSpecularLight(Color.BLACK);
-//        spotlightLight.setLightColor(Color.BLUE);
-//        spotlightLight.setGlobalAmbientLight(Color.BLACK);
+        MySpotLight spotlightLight = new MySpotLight(new float[]{-0.5f,-1.5f,0f,0f}, 30f);
+        float[] spotlightLightPosition = new float[]{-1f, 1f, 0f, 1f};
+        spotlightLight.setPosition(spotlightLightPosition);
+        spotlightLight.setAmbientLight(Color.BLACK);
+        spotlightLight.setSpecularLight(Color.BLACK);
+        spotlightLight.setLightColor(Color.BLUE);
+        spotlightLight.setGlobalAmbientLight(Color.BLACK);
 //        lights.add(spotlightLight);
         /**
          * Point Light
