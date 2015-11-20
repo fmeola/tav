@@ -16,6 +16,7 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
 
     private List<DisplayableObject> objects;
     private List<MyLight> lights;
+    private GameElements gameElements;
 
     private boolean firstTime;
 

@@ -19,6 +19,7 @@ public abstract class MyCamera {
 
     public float rotX = 0;
     public float rotY = 0;
+    public float rotZ = 0;
 
     public MyCamera(float width, float height) {
         this.width = width;
@@ -32,7 +33,8 @@ public abstract class MyCamera {
     public Matrix4 getVMatrix() {
         return Translation.getTranslationMatrix(position.x, position.y, position.z).
                 mul(Rotation.getXRotationMatrix(rotX)).
-                mul(Rotation.getYRotationMatrix(rotY)).inv();
+                mul(Rotation.getYRotationMatrix(rotY)).
+                mul(Rotation.getZRotationMatrix(rotZ)).inv();
     }
 
     public abstract Matrix4 getPMatrix();

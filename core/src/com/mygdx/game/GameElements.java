@@ -21,15 +21,15 @@ import java.util.List;
 
 public class GameElements {
 
-    private static final float dirDiff = 0.05f;
+    private static final float dirDiff = 0.01f;
     private static final float spotDiff = 0.025f;
-    private static final int DIR_LIGHT_MOVE_LIMIT = (int)(2/dirDiff);
+    private static final int DIR_LIGHT_MOVE_LIMIT = 100;
     private static final int SPOT_LIGHT_MOVE_LIMIT = (int)(2/spotDiff);
-    private static int countDirectional = -DIR_LIGHT_MOVE_LIMIT/2;
+    private static int countDirectional = 0;
     private static int countSpotlight = -SPOT_LIGHT_MOVE_LIMIT/2;
     private static boolean rightDirDirectional = true;
     private static boolean rightDirSpotlight = true;
-
+    
     public static MyCamera initOrthographicCamera() {
         MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera.position.set(0f, 0f, 2f);
@@ -59,7 +59,7 @@ public class GameElements {
     }
 
     public static List<MyLight> initLights() {
-        List<MyLight> lights = new ArrayList<>();
+        List<MyLight> lights = new ArrayList();
         /**
          * Directional Light
          */
@@ -81,21 +81,21 @@ public class GameElements {
         spotlightLight.setLightColor(Color.BLUE);
         spotlightLight.setGlobalAmbientLight(Color.BLACK);
         lights.add(spotlightLight);
-        /**
-         * Point Light
-         */
-        MyPointLight pointLight = new MyPointLight();
-        pointLight.setPosition(new float[]{-1.5f, 3f, 0f, 1f}); //position
-        pointLight.setAmbientLight(Color.BLACK);
-        pointLight.setSpecularLight(Color.BLACK);
-        pointLight.setLightColor(Color.GREEN);
-        pointLight.setGlobalAmbientLight(Color.BLACK);
-        lights.add(pointLight);
+//        /**
+//         * Point Light
+//         */
+//        MyPointLight pointLight = new MyPointLight();
+//        pointLight.setPosition(new float[]{-1.5f, 3f, 0f, 1f}); //position
+//        pointLight.setAmbientLight(Color.BLACK);
+//        pointLight.setSpecularLight(Color.BLACK);
+//        pointLight.setLightColor(Color.GREEN);
+//        pointLight.setGlobalAmbientLight(Color.BLACK);
+//        lights.add(pointLight);
         return lights;
     }
 
     public static List<DisplayableObject> initSpaceships() {
-        List<DisplayableObject> spaceships = new ArrayList<>();
+        List<DisplayableObject> spaceships = new ArrayList();
         Texture texture = new Texture("ship/ship.png");
         Material material = new Material();
         ModelLoader loader = new ObjLoader();
@@ -140,9 +140,11 @@ public class GameElements {
             if (rightDirDirectional) {
                 ++countDirectional;
                 lightPosition[0] += dirDiff;
+                directionalLight.getCamera().rotY += dirDiff;
             } else {
                 --countDirectional;
                 lightPosition[0] -= dirDiff;
+                directionalLight.getCamera().rotY -= dirDiff;
             }
             if (countDirectional == DIR_LIGHT_MOVE_LIMIT || countDirectional == -DIR_LIGHT_MOVE_LIMIT) {
                 rightDirDirectional = !rightDirDirectional;
