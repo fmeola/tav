@@ -23,7 +23,7 @@ float unpack(const vec4);
 
 void main()
 {
-    float bias = 0.001;
+    float bias = 0.005;
     float visibility = 1.;
 
     //decode
@@ -38,8 +38,8 @@ void main()
     //z actual vista desde la luz
     float zLight = posFromLight.z;
 
-    if (shadowCords.z - 0.01 > zShadow) {
-        visibility = 0.;
+    if (shadowCords.z - bias > zShadow) {
+        visibility -= .5;
     }
 
     vec4 lightDirectionEye = u_viewMatrix*direction;

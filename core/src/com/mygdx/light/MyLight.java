@@ -16,6 +16,8 @@ public abstract class MyLight {
     protected float[] lightColor = new float[]{1f,1f,1f,1f};
     protected float[] globalAmbientLight = new float[]{0.7f,0.7f,0.7f,1f};
 
+    private boolean enabled = true;
+
     public MyLight(String vsPath, String fsPath) {
         String vs = Gdx.files.internal(vsPath).readString();
         String fs = Gdx.files.internal(fsPath).readString();
@@ -104,6 +106,14 @@ public abstract class MyLight {
 
     public float[] getPosition() {
         return position;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    };
+
+    public void changeState() {
+        enabled = !enabled;
     }
 
 }

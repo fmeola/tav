@@ -3,18 +3,17 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.mygdx.camera.MyCamera;
-
-import java.awt.*;
+import com.mygdx.light.MyDirectionalLight;
+import com.mygdx.light.MyLight;
+import com.mygdx.light.MyPointLight;
+import com.mygdx.light.MySpotLight;
 
 public class GameInputProcessor implements InputProcessor {
 
-    private MyCamera camera;
-    private Point mousePosition;
+    private MyGameScene game;
 
-    public GameInputProcessor(MyCamera camera, Point mousePosition) {
-        this.camera = camera;
-        this.mousePosition = mousePosition;
+    public GameInputProcessor(MyGameScene game) {
+        this.game = game;
     }
 
     @Override
@@ -31,17 +30,43 @@ public class GameInputProcessor implements InputProcessor {
     public boolean keyTyped(char character) {
         float moveAmount = 0.1f;
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            camera.position.x -= moveAmount;
+            game.getCamera().position.x -= moveAmount;
             return true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            camera.position.x += moveAmount;
+            game.getCamera().position.x += moveAmount;
             return true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            camera.position.y += moveAmount;
+            game.getCamera().position.y += moveAmount;
             return true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            camera.position.y -= moveAmount;
+            game.getCamera().position.y -= moveAmount;
             return true;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.P)) {
+            if(game.getLights() != null) {
+                for (MyLight l : game.getLights()) {
+                    if (l instanceof MyPointLight) {
+                        l.changeState();
+                    }
+                }
+            }
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.S)) {
+            if(game.getLights() != null) {
+                for (MyLight l : game.getLights()) {
+                    if (l instanceof MySpotLight) {
+                        l.changeState();
+                    }
+                }
+            }
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.D)) {
+            if(game.getLights() != null) {
+                for (MyLight l : game.getLights()) {
+                    if (l instanceof MyDirectionalLight) {
+                        l.changeState();
+                    }
+                }
+            }
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isKeyPressed(Input.Keys.C)) {
+            game.changeCamera();
         }
         return false;
     }
@@ -64,17 +89,17 @@ public class GameInputProcessor implements InputProcessor {
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         float value;
-        if (screenX != mousePosition.x) {
-            value = screenX > mousePosition.x ? -0.01f : 0.01f;
-            camera.rotY += value;
+        if (screenX != game.getMousePosition().x) {
+            value = screenX > game.getMousePosition().x ? -0.01f : 0.01f;
+            game.getCamera().rotY += value;
             //MyGdxGame.shadowCamera.rotY += value;
-            mousePosition.x = screenX;
+            game.getMousePosition().x = screenX;
         }
-        if (screenY != mousePosition.y) {
-            value = screenY > mousePosition.y ? -0.01f : 0.01f;
-            camera.rotX += value;
+        if (screenY != game.getMousePosition().y) {
+            value = screenY > game.getMousePosition().y ? -0.01f : 0.01f;
+            game.getCamera().rotX += value;
 //            MyGdxGame.shadowCamera.rotX += value;
-            mousePosition.y = screenY;
+            game.getMousePosition().y = screenY;
         }
         return true;
     }

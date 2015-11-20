@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -16,9 +15,9 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.UBJsonReader;
-import com.mygdx.camera.MyCamera;
+import com.mygdx.light.MyLight;
 
-import java.awt.*;
+import java.util.List;
 
 /**
  * Inspiración:
@@ -26,7 +25,7 @@ import java.awt.*;
  * 2) https://github.com/libgdx/fbx-conv
  * 3) http://dagger.se/?p=71
  */
-public class SkinnedAnimations extends ApplicationAdapter {
+public class SkinnedAnimations extends MyAbstractGameScene implements MyGameScene {
 
     private AssetManager assets;
     private ModelInstance characterInstance;
@@ -34,8 +33,6 @@ public class SkinnedAnimations extends ApplicationAdapter {
     private Texture texture;
 
     private ShaderProgram shaderProgram;
-    private MyCamera camera;
-    private Point mousePosition = new Point(0,0);
 
     private static final String VS_PATH = "animation/animation-vs.glsl";
     private static final String FS_PATH = "animation/animation-fs.glsl";
@@ -82,7 +79,7 @@ public class SkinnedAnimations extends ApplicationAdapter {
         /**
          * Keyboard & Mouse
          */
-        Gdx.input.setInputProcessor(new GameInputProcessor(camera, mousePosition));
+        Gdx.input.setInputProcessor(new GameInputProcessor(this));
     }
 
     @Override
@@ -137,6 +134,11 @@ public class SkinnedAnimations extends ApplicationAdapter {
     public void dispose() {
         assets.dispose();
         shaderProgram.dispose();
+    }
+
+    @Override
+    public List<MyLight> getLights() {
+        return null;
     }
 
 }

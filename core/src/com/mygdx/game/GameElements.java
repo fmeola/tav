@@ -30,9 +30,17 @@ public class GameElements {
     private static boolean rightDirDirectional = true;
     private static boolean rightDirSpotlight = true;
 
-    public static MyCamera initCamera() {
-//        MyCamera camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    public static MyCamera initOrthographicCamera() {
         MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
+        camera.position.set(0f, 0f, 2f);
+        //camera.lookAt(0, 0, 0);
+        camera.near = 0.1f;
+        camera.far = 300f;
+        return camera;
+    }
+
+    public static MyCamera initPerspectiveCameraCamera() {
+        MyCamera camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(0f, 0f, 2f);
         //camera.lookAt(0, 0, 0);
         camera.near = 0.1f;
@@ -72,7 +80,7 @@ public class GameElements {
         spotlightLight.setSpecularLight(Color.BLACK);
         spotlightLight.setLightColor(Color.BLUE);
         spotlightLight.setGlobalAmbientLight(Color.BLACK);
-//        lights.add(spotlightLight);
+        lights.add(spotlightLight);
         /**
          * Point Light
          */
@@ -82,7 +90,7 @@ public class GameElements {
         pointLight.setSpecularLight(Color.BLACK);
         pointLight.setLightColor(Color.GREEN);
         pointLight.setGlobalAmbientLight(Color.BLACK);
-//        lights.add(pointLight);
+        lights.add(pointLight);
         return lights;
     }
 
