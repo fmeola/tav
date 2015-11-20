@@ -86,7 +86,7 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
 
                     shadowBuffer.begin();
 
-                    Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
+                    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
                     Gdx.gl.glCullFace(GL20.GL_FRONT);
 

@@ -22,6 +22,7 @@ public abstract class MyLight {
         String vs = Gdx.files.internal(vsPath).readString();
         String fs = Gdx.files.internal(fsPath).readString();
         this.shaderProgram = new ShaderProgram(vs, fs);
+        this.shaderProgram.pedantic = false;
         System.out.print(shaderProgram.getLog());
     }
 

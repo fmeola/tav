@@ -60,16 +60,7 @@ public class GameElements {
 
     public static List<MyLight> initLights() {
         List<MyLight> lights = new ArrayList();
-        /**
-         * Directional Light
-         */
-        MyDirectionalLight directionalLight = new MyDirectionalLight();
-        directionalLight.setPosition(new float[]{0f, 1f, 0f, 0f}); //direction
-        directionalLight.setAmbientLight(Color.BLACK);
-        directionalLight.setSpecularLight(Color.BLACK);
-        directionalLight.setLightColor(Color.WHITE);
-        directionalLight.setGlobalAmbientLight(Color.BLACK);
-        lights.add(directionalLight);
+
         /**
          * Spot Light
          */
@@ -80,7 +71,18 @@ public class GameElements {
         spotlightLight.setSpecularLight(Color.BLACK);
         spotlightLight.setLightColor(Color.BLUE);
         spotlightLight.setGlobalAmbientLight(Color.BLACK);
-        lights.add(spotlightLight);
+//        lights.add(spotlightLight);
+        
+                /**
+         * Directional Light
+         */
+        MyDirectionalLight directionalLight = new MyDirectionalLight();
+        directionalLight.setPosition(new float[]{0f, 1f, 0f, 0f}); //direction
+        directionalLight.setAmbientLight(Color.BLACK);
+        directionalLight.setSpecularLight(Color.BLACK);
+        directionalLight.setLightColor(Color.WHITE);
+        directionalLight.setGlobalAmbientLight(Color.BLACK);
+        lights.add(directionalLight);
 //        /**
 //         * Point Light
 //         */
@@ -162,7 +164,7 @@ public class GameElements {
             } else {
                 --countSpotlight;
                 lightPosition[0] -= spotDiff;
-            }
+    }
             if (countSpotlight == SPOT_LIGHT_MOVE_LIMIT || countSpotlight == -SPOT_LIGHT_MOVE_LIMIT) {
                 rightDirSpotlight = !rightDirSpotlight;
             }
