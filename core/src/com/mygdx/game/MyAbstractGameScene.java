@@ -9,9 +9,6 @@ import com.mygdx.light.MyLight;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Created by francoroman on 20/11/15.
- */
 public abstract class MyAbstractGameScene extends ApplicationAdapter implements MyGameScene {
 
     protected MyCamera camera;

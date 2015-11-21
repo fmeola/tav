@@ -16,11 +16,11 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
 
     private List<DisplayableObject> objects;
     private List<MyLight> lights;
-    private GameElements gameElements;
 
     private boolean firstTime;
 
     private FrameBuffer shadowBuffer;
+    private static final int SHADOW_BUFFER_SIZE = 2048;
 
     @Override
     public void create () {
@@ -42,7 +42,7 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
         /**
          * ShadowBuffer para el ShadowMap de la Directional Light.
          */
-        shadowBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        shadowBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, SHADOW_BUFFER_SIZE, SHADOW_BUFFER_SIZE, true);
 
         /**
          * Keyboard & Mouse
