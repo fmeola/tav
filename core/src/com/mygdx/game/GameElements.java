@@ -18,6 +18,7 @@ import com.mygdx.material.Material;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class GameElements {
 
@@ -34,7 +35,7 @@ public class GameElements {
         MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera.position.set(0f, 0f, 2f);
         //camera.lookAt(0, 0, 0);
-        camera.near = 0.1f;
+        camera.near = 0.000001f;
         camera.far = 300f;
         return camera;
     }
@@ -71,7 +72,7 @@ public class GameElements {
         spotlightLight.setSpecularLight(Color.BLACK);
         spotlightLight.setLightColor(Color.BLUE);
         spotlightLight.setGlobalAmbientLight(Color.BLACK);
-//        lights.add(spotlightLight);
+        lights.add(spotlightLight);
         /**
          * Directional Light
          */
@@ -91,7 +92,7 @@ public class GameElements {
         pointLight.setSpecularLight(Color.BLACK);
         pointLight.setLightColor(Color.GREEN);
         pointLight.setGlobalAmbientLight(Color.BLACK);
-//        lights.add(pointLight);
+        lights.add(pointLight);
         return lights;
     }
 
@@ -110,6 +111,25 @@ public class GameElements {
         spaceships.add(new DisplayableObject(mesh, new Vector3(-1.5f, 0, 0), texture, material));
         spaceships.add(new DisplayableObject(mesh, new Vector3(0, 0, 0), texture, material));
         spaceships.add(new DisplayableObject(mesh, new Vector3(1.5f, 0, 0), texture, material));
+        return spaceships;
+    }
+
+    public static List<DisplayableObject> initSWSpaceships() {
+        List<DisplayableObject> spaceships = new ArrayList();
+        Texture texture = new Texture("swspaceship/maps/ARC170_TXT_VERSION_4_D.tga");
+        Material material = new Material();
+        ModelLoader loader = new ObjLoader();
+        ModelData data = loader.loadModelData(Gdx.files.internal("swspaceship/ARC170.obj"));
+        Mesh mesh = new Mesh(true,
+                data.meshes.get(0).vertices.length,
+                data.meshes.get(0).parts[0].indices.length,
+                VertexAttribute.Position(), VertexAttribute.Normal(), VertexAttribute.TexCoords(0));
+        mesh.setVertices(data.meshes.get(0).vertices);
+        mesh.setIndices(data.meshes.get(0).parts[0].indices);
+        Vector3 scaleVector = new Vector3(0.0015f, 0.0015f, 0.0015f);
+        spaceships.add(new DisplayableObject(mesh, new Vector3(-3f, 0, 0), texture, material, scaleVector));
+        spaceships.add(new DisplayableObject(mesh, new Vector3(-0.5f, 0, 0), texture, material, scaleVector));
+        spaceships.add(new DisplayableObject(mesh, new Vector3(2f, 0, 0), texture, material, scaleVector));
         return spaceships;
     }
 

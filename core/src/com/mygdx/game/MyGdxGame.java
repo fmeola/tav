@@ -34,7 +34,8 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
         /**
          * Spaceships, quad, lights and camera.
          */
-        objects = GameElements.initSpaceships();
+//        objects = GameElements.initSpaceships();
+        objects = GameElements.initSWSpaceships();
         objects.add(GameElements.initQuad());
         lights = GameElements.initLights();
         camera = GameElements.initOrthographicCamera();

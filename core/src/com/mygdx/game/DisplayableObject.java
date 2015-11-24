@@ -13,6 +13,7 @@ public class DisplayableObject {
     private Mesh mesh;
     private Texture texture;
     private Material material;
+    private Vector3 scale = new Vector3(1,1,1);
 
     public DisplayableObject(Mesh mesh, Vector3 position, Texture texture, Material material){
         this.mesh = mesh;
@@ -21,14 +22,22 @@ public class DisplayableObject {
         this.material = material;
     }
 
+    public DisplayableObject(Mesh mesh, Vector3 position, Texture texture, Material material, Vector3 scale){
+        this.mesh = mesh;
+        this.position = position;
+        this.texture = texture;
+        this.material = material;
+        this.scale = scale;
+    }
+
     public Mesh getMesh() {
         return mesh;
     }
 
     public Matrix4 getTMatrix(){
-        float[] values = { 1,0,0,0,
-                0,1,0,0,
-                0,0,1,0,
+        float[] values = { scale.x,0,0,0,
+                0,scale.y,0,0,
+                0,0,scale.z,0,
                 position.x,position.y,position.z,1
         };
         return new Matrix4(values);
@@ -41,4 +50,5 @@ public class DisplayableObject {
     public Material getMaterial() {
         return material;
     }
+
 }
