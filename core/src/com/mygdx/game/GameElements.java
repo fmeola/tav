@@ -35,14 +35,14 @@ public class GameElements {
         MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera.position.set(0f, 0f, 2f);
         //camera.lookAt(0, 0, 0);
-        camera.near = 0.000001f;
+        camera.near = 0.01f;
         camera.far = 300f;
         return camera;
     }
 
     public static MyCamera initPerspectiveCameraCamera() {
         MyCamera camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(0f, 0f, 2f);
+        camera.position.set(0f, 0f, 3.5f);
         //camera.lookAt(0, 0, 0);
         camera.near = 0.1f;
         camera.far = 300f;

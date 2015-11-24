@@ -41,6 +41,12 @@ public class GameInputProcessor implements InputProcessor {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             game.getCamera().position.y -= moveAmount;
             return true;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.Q)) {
+            game.getCamera().position.z -= moveAmount;
+            return true;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+            game.getCamera().position.z += moveAmount;
+            return true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P) || Gdx.input.isKeyPressed(Input.Keys.P)) {
             if(game.getLights() != null) {
                 for (MyLight l : game.getLights()) {
@@ -49,6 +55,7 @@ public class GameInputProcessor implements InputProcessor {
                     }
                 }
             }
+            return true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             if(game.getLights() != null) {
                 for (MyLight l : game.getLights()) {
@@ -57,6 +64,7 @@ public class GameInputProcessor implements InputProcessor {
                     }
                 }
             }
+            return true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             if(game.getLights() != null) {
                 for (MyLight l : game.getLights()) {
@@ -65,8 +73,10 @@ public class GameInputProcessor implements InputProcessor {
                     }
                 }
             }
+            return true;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isKeyPressed(Input.Keys.C)) {
             game.changeCamera();
+            return true;
         }
         return false;
     }

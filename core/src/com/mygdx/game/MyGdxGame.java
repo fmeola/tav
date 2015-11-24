@@ -38,7 +38,8 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
         objects = GameElements.initSWSpaceships();
         objects.add(GameElements.initQuad());
         lights = GameElements.initLights();
-        camera = GameElements.initOrthographicCamera();
+        camera = GameElements.initPerspectiveCameraCamera();
+//        camera = GameElements.initOrthographicCamera();
 
         /**
          * ShadowBuffer para el ShadowMap de la Directional Light.
