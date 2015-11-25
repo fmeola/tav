@@ -10,15 +10,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.camera.MyGdxPerspectiveCamera;
-import com.mygdx.light.MyDirectionalLight;
-import com.mygdx.light.MyLight;
-import com.mygdx.light.MyPointLight;
-import com.mygdx.light.MySpotLight;
+import com.mygdx.light.*;
 import com.mygdx.material.Material;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class GameElements {
 
@@ -34,7 +30,6 @@ public class GameElements {
     public static MyCamera initOrthographicCamera() {
         MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera.position.set(0f, 0f, 2f);
-        //camera.lookAt(0, 0, 0);
         camera.near = 0.01f;
         camera.far = 300f;
         return camera;
@@ -43,7 +38,6 @@ public class GameElements {
     public static MyCamera initPerspectiveCameraCamera() {
         MyCamera camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(0f, 0f, 3.5f);
-        //camera.lookAt(0, 0, 0);
         camera.near = 0.1f;
         camera.far = 300f;
         return camera;
@@ -53,7 +47,6 @@ public class GameElements {
         MyCamera camera = new MyGdxPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //        MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera.position.set(0f, 5f, 25f);
-//        camera.lookAt(0, 0, 0);
         camera.near = 0.1f;
         camera.far = 300f;
         return camera;
@@ -183,12 +176,16 @@ public class GameElements {
             } else {
                 --countSpotlight;
                 lightPosition[0] -= spotDiff;
-    }
+            }
             if (countSpotlight == SPOT_LIGHT_MOVE_LIMIT || countSpotlight == -SPOT_LIGHT_MOVE_LIMIT) {
                 rightDirSpotlight = !rightDirSpotlight;
             }
             light.setPosition(lightPosition);
         }
+    }
+
+    public static EnvironmentCubemap initEnvironmentCubemap() {
+        return new EnvironmentCubemap(new Pixmap(Gdx.files.internal("cubemap/b5u4r.jpg")));
     }
 
 }

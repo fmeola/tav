@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import com.mygdx.camera.MyCamera;
+import com.mygdx.light.EnvironmentCubemap;
 import com.mygdx.light.MyDirectionalLight;
 import com.mygdx.light.MyLight;
 
@@ -21,6 +22,8 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
 
     private FrameBuffer shadowBuffer;
     private static final int SHADOW_BUFFER_SIZE = 2048;
+
+    private EnvironmentCubemap environmentCubemap;
 
     @Override
     public void create () {
@@ -37,6 +40,7 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
 //        objects = GameElements.initSpaceships();
         objects = GameElements.initSWSpaceships();
         objects.add(GameElements.initQuad());
+        environmentCubemap = GameElements.initEnvironmentCubemap();
         lights = GameElements.initLights();
         camera = GameElements.initPerspectiveCameraCamera();
 //        camera = GameElements.initOrthographicCamera();
@@ -56,6 +60,14 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
     public void render () {
         firstTime = true;
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+        /**
+         * Render del cubemap de fondo.
+         */
+        if(environmentCubemap != null) {
+            environmentCubemap.render(camera);
+            Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
+        }
 
         for(MyLight light: lights){
             if(light.isEnabled()) {
@@ -117,7 +129,6 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
                     Gdx.gl.glCullFace(GL20.GL_BACK);
 
                     for (DisplayableObject obj : objects) {
-                        //                    shaderProgram.setUniformMatrix("u_worldView", shadowCamera.getPVMatrix().mul(obj.getTMatrix()));
                         shaderProgram.setUniformMatrix("u_worldView", camera.getPVMatrix().mul(obj.getTMatrix()));
                         shaderProgram.setUniformMatrix("u_modelViewMatrix", camera.getVMatrix().mul(obj.getTMatrix()));
                         shaderProgram.setUniformMatrix("u_modelViewProjectionMatrixLight", shadowCamera.getPVMatrix().mul(obj.getTMatrix()));

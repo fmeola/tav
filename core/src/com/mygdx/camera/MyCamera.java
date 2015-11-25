@@ -31,6 +31,9 @@ public abstract class MyCamera {
     }*/
 
     public Matrix4 getVMatrix() {
+//        Matrix4 aux = Rotation.getYRotationMatrix(rotY).mul(Rotation.getXRotationMatrix(rotX));
+//        Matrix4 aux2 = Translation.getTranslationMatrix(position.x, position.y, position.z);
+//        return aux2.mul(aux).inv();
         return Translation.getTranslationMatrix(position.x, position.y, position.z).
                 mul(Rotation.getXRotationMatrix(rotX)).
                 mul(Rotation.getYRotationMatrix(rotY)).

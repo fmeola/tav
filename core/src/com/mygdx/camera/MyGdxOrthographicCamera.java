@@ -18,5 +18,4 @@ public class MyGdxOrthographicCamera extends MyCamera {
         return projectionMatrix;
     }
 
-
 }

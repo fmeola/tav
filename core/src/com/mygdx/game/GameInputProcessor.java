@@ -102,13 +102,11 @@ public class GameInputProcessor implements InputProcessor {
         if (screenX != game.getMousePosition().x) {
             value = screenX > game.getMousePosition().x ? -0.01f : 0.01f;
             game.getCamera().rotY += value;
-            //MyGdxGame.shadowCamera.rotY += value;
             game.getMousePosition().x = screenX;
         }
         if (screenY != game.getMousePosition().y) {
             value = screenY > game.getMousePosition().y ? -0.01f : 0.01f;
             game.getCamera().rotX += value;
-//            MyGdxGame.shadowCamera.rotX += value;
             game.getMousePosition().y = screenY;
         }
         return true;
