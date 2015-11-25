@@ -26,7 +26,9 @@ public class GameElements {
     private static int countSpotlight = -SPOT_LIGHT_MOVE_LIMIT/2;
     private static boolean rightDirDirectional = true;
     private static boolean rightDirSpotlight = true;
-    
+
+    private static final String cubeMapPath = "cubemap/spaceCubeMap.jpg";
+
     public static MyCamera initOrthographicCamera() {
         MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera.position.set(0f, 0f, 2f);
@@ -185,7 +187,7 @@ public class GameElements {
     }
 
     public static EnvironmentCubemap initEnvironmentCubemap() {
-        return new EnvironmentCubemap(new Pixmap(Gdx.files.internal("cubemap/b5u4r.jpg")));
+        return new EnvironmentCubemap(new Pixmap(Gdx.files.internal(cubeMapPath)));
     }
 
 }

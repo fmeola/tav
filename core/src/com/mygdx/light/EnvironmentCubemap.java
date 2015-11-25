@@ -5,46 +5,23 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.camera.MyCamera;
 
 /**
- * Fuente:
- * http://stackoverflow.com/questions/21884805/libgdx-0-9-9-apply-cubemap-in-environment
+ * Fuente: http://stackoverflow.com/questions/21884805/libgdx-0-9-9-apply-cubemap-in-environment
  */
 public class EnvironmentCubemap {
 
-    private final Pixmap[] data = new Pixmap[6];
+    private Pixmap[] data = new Pixmap[6];
     private ShaderProgram shader;
     private int u_worldTrans;
     private Mesh quad;
     private Matrix4 worldTrans;
     private Quaternion q;
 
-    protected String vertexShader = " attribute vec3 a_position; \n"+
-            " attribute vec3 a_normal; \n"+
-            " attribute vec2 a_texCoord0; \n"+
-            " uniform mat4 u_worldTrans; \n"+
-            " varying vec2 v_texCoord0; \n"+
-            " varying vec3 v_cubeMapUV; \n"+
-            " void main() { \n"+
-            "     v_texCoord0 = a_texCoord0;     \n"+
-            "     vec4 g_position = u_worldTrans * vec4(a_position, 1.0); \n"+
-            "     v_cubeMapUV = normalize(g_position.xyz); \n"+
-            "     gl_Position = vec4(a_position, 1.0); \n"+
-            " } \n";
+    private static final String vsPath = "cubemap/cubemap-vs.glsl";
+    private static final String fsPath = "cubemap/cubemap-fs.glsl";
 
-    protected String fragmentShader = "#ifdef GL_ES \n"+
-            " precision mediump float; \n"+
-            " #endif \n"+
-            " uniform samplerCube u_environmentCubemap; \n"+
-            " varying vec2 v_texCoord0; \n"+
-            " varying vec3 v_cubeMapUV; \n"+
-            " void main() {      \n"+
-            "   gl_FragColor = vec4(textureCube(u_environmentCubemap, v_cubeMapUV).rgb, 1.0);   \n"+
-            " } \n";
-
-    //IF ALL SIX SIDES ARE REPRESENTED IN ONE IMAGE
     public EnvironmentCubemap (Pixmap cubemap) {
         int w = cubemap.getWidth();
         int h = cubemap.getHeight();
@@ -78,9 +55,9 @@ public class EnvironmentCubemap {
     }
 
     private void init(){
-        shader = new ShaderProgram(vertexShader, fragmentShader);
-        if (!shader.isCompiled())
-            throw new GdxRuntimeException(shader.getLog());
+        String vs = Gdx.files.internal(vsPath).readString();
+        String fs = Gdx.files.internal(fsPath).readString();
+        shader = new ShaderProgram(vs, fs);
         u_worldTrans = shader.getUniformLocation("u_worldTrans");
         quad = createQuad();
         worldTrans = new Matrix4();
@@ -104,16 +81,11 @@ public class EnvironmentCubemap {
         Gdx.gl20.glGenerateMipmap(GL20.GL_TEXTURE_CUBE_MAP);
     }
 
-    float a = 0;
-
     public void render(MyCamera camera){
-        //SPECIAL THANKS TO Jos van Egmond
-//        camera.view.getRotation( q, true );
+        camera.getVMatrix().getRotation(q, true);
         q.conjugate();
-        ///////////////////////////////////
         worldTrans.idt();
-        a++;
-//        worldTrans.rotate(camera.rotX, camera.rotY, camera.rotZ, 5);
+        worldTrans.rotate(q);
         shader.begin();
         shader.setUniformMatrix(u_worldTrans, worldTrans.translate(0, 0, -1));
         quad.render(shader, GL20.GL_TRIANGLES);

@@ -17,13 +17,12 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
 
     private List<DisplayableObject> objects;
     private List<MyLight> lights;
+    private EnvironmentCubemap environmentCubemap;
 
     private boolean firstTime;
 
     private FrameBuffer shadowBuffer;
     private static final int SHADOW_BUFFER_SIZE = 2048;
-
-    private EnvironmentCubemap environmentCubemap;
 
     @Override
     public void create () {
