@@ -43,6 +43,7 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
         lights = GameElements.initLights();
         camera = GameElements.initPerspectiveCameraCamera();
 //        camera = GameElements.initOrthographicCamera();
+        objects.add(GameElements.initCity());
 
         /**
          * ShadowBuffer para el ShadowMap de la Directional Light.
@@ -174,12 +175,15 @@ public class MyGdxGame extends MyAbstractGameScene implements MyGameScene {
     @Override
     public void dispose() {
         for(MyLight l : lights) {
-            l.getShaderProgram().dispose();
-            if(l instanceof MyDirectionalLight) {
-                ((MyDirectionalLight) l).getShadowShaderProgram().dispose();
-            }
+            l.dispose();
         }
         shadowBuffer.dispose();
+        if(environmentCubemap != null) {
+            environmentCubemap.dispose();
+        }
+        for(DisplayableObject object : objects) {
+            object.dispose();
+        }
     }
 
     @Override

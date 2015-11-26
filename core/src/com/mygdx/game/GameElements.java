@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.math.Vector3;
 
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 import com.mygdx.camera.MyGdxPerspectiveCamera;
 import com.mygdx.light.*;
 import com.mygdx.material.Material;
+import sun.jvm.hotspot.debugger.cdbg.LoadObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +28,6 @@ public class GameElements {
     private static int countSpotlight = -SPOT_LIGHT_MOVE_LIMIT/2;
     private static boolean rightDirDirectional = true;
     private static boolean rightDirSpotlight = true;
-
-    private static final String cubeMapPath = "cubemap/spaceCubeMap.jpg";
 
     public static MyCamera initOrthographicCamera() {
         MyCamera camera = new MyGdxOrthographicCamera(3, 3 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
@@ -93,39 +93,46 @@ public class GameElements {
 
     public static List<DisplayableObject> initSpaceships() {
         List<DisplayableObject> spaceships = new ArrayList();
-        Texture texture = new Texture("ship/ship.png");
-        Material material = new Material();
-        ModelLoader loader = new ObjLoader();
-        ModelData data = loader.loadModelData(Gdx.files.internal("ship/ship.obj"));
-        Mesh mesh = new Mesh(true,
-                data.meshes.get(0).vertices.length,
-                data.meshes.get(0).parts[0].indices.length,
-                VertexAttribute.Position(), VertexAttribute.Normal(), VertexAttribute.TexCoords(0));
-        mesh.setVertices(data.meshes.get(0).vertices);
-        mesh.setIndices(data.meshes.get(0).parts[0].indices);
-        spaceships.add(new DisplayableObject(mesh, new Vector3(-1.5f, 0, 0), texture, material));
-        spaceships.add(new DisplayableObject(mesh, new Vector3(0, 0, 0), texture, material));
-        spaceships.add(new DisplayableObject(mesh, new Vector3(1.5f, 0, 0), texture, material));
+        String objPath = "ship/ship.obj";
+        String texturePath = "ship/ship.png";
+        spaceships.add(loadModel(objPath, texturePath, new Vector3(-1.5f, 0, 0)));
+        spaceships.add(loadModel(objPath, texturePath, new Vector3(0, 0, 0)));
+        spaceships.add(loadModel(objPath, texturePath, new Vector3(1.5f, 0, 0)));
         return spaceships;
     }
 
     public static List<DisplayableObject> initSWSpaceships() {
         List<DisplayableObject> spaceships = new ArrayList();
-        Texture texture = new Texture("swspaceship/maps/ARC170_TXT_VERSION_4_D.tga");
+        Vector3 scaleVector = new Vector3(0.0015f, 0.0015f, 0.0015f);
+        String objPath = "swspaceship/ARC170.obj";
+        String texturePath = "swspaceship/maps/ARC170_TXT_VERSION_4_D.tga";
+        spaceships.add(loadModel(objPath, texturePath, new Vector3(-3f, 0, 0), scaleVector));
+        spaceships.add(loadModel(objPath, texturePath, new Vector3(-0.5f, 0, 0), scaleVector));
+        spaceships.add(loadModel(objPath, texturePath, new Vector3(2f, 0, 0), scaleVector));
+        return spaceships;
+    }
+
+    private static DisplayableObject loadModel(String objPath, String texturePath, Vector3 position) {
+        return loadModel(objPath, texturePath, new Vector3(1,1,1), position);
+    }
+
+    private static DisplayableObject loadModel(String objPath, String texturePath, Vector3 position, Vector3 scale) {
+        Texture texture = new Texture(texturePath);
         Material material = new Material();
         ModelLoader loader = new ObjLoader();
-        ModelData data = loader.loadModelData(Gdx.files.internal("swspaceship/ARC170.obj"));
+        ModelData data = loader.loadModelData(Gdx.files.internal(objPath));
         Mesh mesh = new Mesh(true,
                 data.meshes.get(0).vertices.length,
                 data.meshes.get(0).parts[0].indices.length,
                 VertexAttribute.Position(), VertexAttribute.Normal(), VertexAttribute.TexCoords(0));
         mesh.setVertices(data.meshes.get(0).vertices);
         mesh.setIndices(data.meshes.get(0).parts[0].indices);
-        Vector3 scaleVector = new Vector3(0.0015f, 0.0015f, 0.0015f);
-        spaceships.add(new DisplayableObject(mesh, new Vector3(-3f, 0, 0), texture, material, scaleVector));
-        spaceships.add(new DisplayableObject(mesh, new Vector3(-0.5f, 0, 0), texture, material, scaleVector));
-        spaceships.add(new DisplayableObject(mesh, new Vector3(2f, 0, 0), texture, material, scaleVector));
-        return spaceships;
+        return new DisplayableObject(mesh, position, texture, material, scale);
+    }
+
+
+    public static DisplayableObject initCity() {
+        return loadModel("city/Organodron City.obj", "city/maps/cta4.jpg", new Vector3(-50f, 0f, -10f), new Vector3(0.1f, 0.1f, 0.1f));
     }
 
     public static DisplayableObject initQuad() {
@@ -187,6 +194,7 @@ public class GameElements {
     }
 
     public static EnvironmentCubemap initEnvironmentCubemap() {
+        String cubeMapPath = "cubemap/spaceCubeMap.jpg";
         return new EnvironmentCubemap(new Pixmap(Gdx.files.internal(cubeMapPath)));
     }
 

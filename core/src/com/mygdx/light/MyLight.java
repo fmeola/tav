@@ -3,8 +3,9 @@ package com.mygdx.light;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.utils.Disposable;
 
-public abstract class MyLight {
+public abstract class MyLight implements Disposable {
     
     protected ShaderProgram shaderProgram;
 
@@ -115,6 +116,11 @@ public abstract class MyLight {
 
     public void changeState() {
         enabled = !enabled;
+    }
+
+    @Override
+    public void dispose() {
+        shaderProgram.dispose();
     }
 
 }

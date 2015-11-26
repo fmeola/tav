@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.material.Material;
 
-public class DisplayableObject {
+public class DisplayableObject implements Disposable {
 
     private Vector3 position = new Vector3(0,0,0);
     private Mesh mesh;
@@ -49,6 +50,11 @@ public class DisplayableObject {
 
     public Material getMaterial() {
         return material;
+    }
+
+    @Override
+    public void dispose() {
+        texture.dispose();
     }
 
 }

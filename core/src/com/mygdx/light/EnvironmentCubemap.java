@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.camera.MyCamera;
 
 /**
  * Fuente: http://stackoverflow.com/questions/21884805/libgdx-0-9-9-apply-cubemap-in-environment
  */
-public class EnvironmentCubemap {
+public class EnvironmentCubemap implements Disposable {
 
     private Pixmap[] data = new Pixmap[6];
     private ShaderProgram shader;
@@ -101,6 +102,15 @@ public class EnvironmentCubemap {
                         -1f, 1f, 0, 1, 1, 1, 1, 0, 0});
         mesh.setIndices(new short[] {0, 1, 2, 2, 3, 0});
         return mesh;
+    }
+
+    @Override
+    public void dispose() {
+        shader.dispose();
+        quad.dispose();
+        for(int i=0; i<6; i++) {
+            data[i].dispose();
+        }
     }
 
 }

@@ -3,10 +3,11 @@ package com.mygdx.light;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.camera.MyCamera;
 import com.mygdx.camera.MyGdxOrthographicCamera;
 
-public class MyDirectionalLight extends MyLight {
+public class MyDirectionalLight extends MyLight implements Disposable {
 
     private static final String vsPath = "blinn-phong-vert.glsl";
     private static final String fsPath = "directional/direct-blinn-phong-frag.glsl";
@@ -61,6 +62,12 @@ public class MyDirectionalLight extends MyLight {
 
     public ShaderProgram getShadowShaderProgram() {
         return shadowShaderProgram;
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        shadowShaderProgram.dispose();
     }
 
 }
